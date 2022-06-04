@@ -1,24 +1,18 @@
 package model;
 
-public class Point {
+import java.util.Comparator;
+
+public class Point implements Comparable<Point> {
+
+    public static double EPSILON = 0;
+    public static double SQR_EPSILON = 0;
 
     private double x;
     private double y;
-    private int power;
 
-    private short xIndex;
-    private short yIndex;
-    private int id;
-
-    public Point(int id, double x, double y, int power){
+    public Point(double x, double y){
         this.x = x;
         this.y = y;
-        this.power = power;
-
-        this.id = id;
-        double epsilon = Math.pow(10, -this.power);
-        this.xIndex = (short)getIndex(this.x, power, epsilon);
-        this.yIndex = (short)getIndex(this.y, power, epsilon);
     }
 
     public double getX(){
@@ -33,6 +27,7 @@ public class Point {
     public String toString() {
         return "(" + this.x + ", " + this.y + ")";
     }
+
 
     @Override
     public boolean equals(final Object obj) {
@@ -50,61 +45,50 @@ public class Point {
         }
 
         Point p2 = (Point)obj;
-        if (this.xIndex == p2.xIndex && this.yIndex == p2.yIndex){
+
+        if ( (Math.pow((this.x - p2.getX()), 2) + Math.pow((this.y - p2.getY()), 2)) <= SQR_EPSILON){
             return true;
         }
 
-//        double epsilon = Math.pow(10, -this.power);
-//        Point p2 = (Point)obj;
-//        if (this.x - p2.getX() <= epsilon){
-//            if(this.y - p2.getY() <= epsilon){
-//                return true;
-//            }
-//        }
         return false;
     }
 
+
+    public static void setEpsilonPower(int power){
+        Point.EPSILON = Math.pow(10, -Math.abs(power));
+        Point.SQR_EPSILON = Math.pow(Point.EPSILON, 2);
+    }
+
     @Override
-    public int hashCode() {
-
-        double epsilon = Math.pow(10, -this.power);
-
-        short xIndex = (short)getIndex(this.x, power, epsilon);
-        short yIndex = (short)getIndex(this.y, power, epsilon);
-
-        String xBits = getBinaryString(xIndex);
-        String yBits = getBinaryString(yIndex);
-
-        String hashBits = xBits + yBits;
-        int hash = Integer.parseInt(hashBits, 2);
-        return hash;
-    }
-
-
-    public static String getBinaryString(short index){
-        String bits = Integer.toBinaryString((int)index);
-        String zero = "0";
-        int size = 16;
-        int rep = size - bits.length();
-        bits = zero.repeat(rep) + bits;
-        return bits;
-    }
-
-    public static int getIndex(double number, int exponent, double epsilon){
-        double x = truncate(number, exponent);
-        if (x == 0.0){
-            return 0;
+    public int compareTo(Point o) {
+        if (Point.EPSILON != 0) {
+            if ( (Math.pow((this.x - o.getX()), 2) + Math.pow((this.y - o.getY()), 2)) <= SQR_EPSILON){
+                return 0;
+            }else if (this.x < o.getX()){
+                return -1;
+            }else if (this.x > o.getX()){
+                return 1;
+            }else{
+                if (this.y < o.getY()){
+                    return -1;
+                }else if (this.y > o.getY()) {
+                    return 1;
+                }
+            }
         }
 
-        int result = (int)((x / epsilon) - 1);
-        return result;
-    }
-
-    public static double truncate(double value, int exponent){
-        if (value == 0){
-            return 0;
+        if (this.x < o.getX()){
+            return -1;
+        }else if (this.x > o.getX()){
+            return 1;
+        }else{
+            if (this.y < o.getY()){
+                return -1;
+            }else if (this.y > o.getY()) {
+                return 1;
+            }else{
+                return 0;
+            }
         }
-        double powerNumber = Math.pow(10, exponent);
-        return Math.floor( value * powerNumber) / powerNumber ;
     }
 }
