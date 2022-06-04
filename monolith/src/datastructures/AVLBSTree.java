@@ -1,7 +1,10 @@
 package datastructures;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
+
+import model.Point;
 
 public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> implements BalancedBSTree<K, V>, Serializable{
 
@@ -15,23 +18,38 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 	}
 	
 	public static void main(String[] args) {
+
+		Point.setEpsilonPower(5);
 		
-		AVLBSTree<String, String> avl = new AVLBSTree<>();
-		avl.add("Chris", "Chris");
-		avl.add("Maria", "Maria");
-		avl.add("Juan", "Juan");
-		avl.add("Clau", "Clau");
-		avl.add("Claudio", "Claudio");
-		avl.add("Clausilio", "Clausilio");
-		avl.add("Julia", "Julia");
-		avl.add("CZ", "CZ");
-		avl.add("CZZZZZZZZZZZZZ", "CZZZZZZZZZZZZZ");
+		AVLBSTree<Point, BigInteger> avl = new AVLBSTree<>();
+
+		avl.add(new Point(0.5, 0.5), BigInteger.ONE);
+		avl.add(new Point(0.5, 0.5), BigInteger.ONE);
+		avl.add(new Point(0.75, 0.75), BigInteger.ONE);
+		avl.add(new Point(0.25, 0.25), BigInteger.ONE);
+		avl.add(new Point(0.00, 0.00), BigInteger.ONE);
+		avl.add(new Point(0.15, 0.15), BigInteger.ONE);
+		avl.add(new Point(0.00, 0.00), BigInteger.ONE);
+		// avl.add(new Point(0.10, 0.10), BigInteger.ONE);
+		// avl.add(new Point(0.05, 0.05), BigInteger.ONE);
+
+		// avl.add("Chris", "Chris");
+		// avl.add("Maria", "Maria");
+		// avl.add("Juan", "Juan");
+		// avl.add("Clau", "Clau");
+		// avl.add("Claudio", "Claudio");
+		// avl.add("Clausilio", "Clausilio");
+		// avl.add("Julia", "Julia");
+		// avl.add("CZ", "CZ");
+		// avl.add("CZZZZZZZZZZZZZ", "CZZZZZZZZZZZZZ");
 		avl.print2D();
 		
-		System.out.println("========");
-		System.out.println(avl.preorderLookUp("JU", 100));
+		System.out.println("==============");
+		System.out.println(avl.inorder());
+		System.out.println("Repeated count = " + avl.getSum());
+		// System.out.println(avl.preorderLookUp("JU", 100));
 		
-		System.out.println(avl.search("Clau"));
+		// System.out.println(avl.search("Clau"));
 	}
 
 	@Override
@@ -85,8 +103,48 @@ public class AVLBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V
 		return height(x.left) - height(x.right);
 	}
 
-	@Override
-	public List<V> autoComplete(String key, int maxSize) {
-		return preorderLookUp(key, maxSize);
+	public BigInteger getSum() {
+		if (root == null) {
+			return BigInteger.ZERO;
+		} else {
+			BigInteger left = getSum(root.left);
+			BigInteger right = getSum(root.right);
+			BigInteger result = BigInteger.ZERO;
+			if (left.compareTo(BigInteger.ONE) > 0) {
+				result = result.add(left);
+			}
+			if (right.compareTo(BigInteger.ONE) > 0) {
+				result = result.add(right);
+			}
+			if (root.values.compareTo(BigInteger.ONE) > 0) {
+				result = result.add(root.values);
+			}
+			return result;
+		}
 	}
+
+	private BigInteger getSum(Node<K, V> x) {
+		if (x == null) {
+			return BigInteger.ZERO;
+		} else {
+			BigInteger left = getSum(x.left);
+			BigInteger right = getSum(x.right);
+			BigInteger result = BigInteger.ZERO;
+			if (left.compareTo(BigInteger.ONE) > 0) {
+				result = result.add(left);
+			}
+			if (right.compareTo(BigInteger.ONE) > 0) {
+				result = result.add(right);
+			}
+			if (x.values.compareTo(BigInteger.ONE) > 0) {
+				result = result.add(x.values);
+			}
+			return result;
+		}
+	}
+
+	// @Override
+	// public List<V> autoComplete(String key, int maxSize) {
+	// 	return preorderLookUp(key, maxSize);
+	// }
 }

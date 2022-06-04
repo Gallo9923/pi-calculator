@@ -1,61 +1,57 @@
 package ui;
 
-import datastructures.AVLBSTree;
-import model.Point;
-import model.PIResult;
-import thread.Task;
+import model.Solver;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    public static final int EPSILON_POWER = 1;
+    public static final int EPSILON_POWER = 3;
     public static final int SEED = 9923;
     public static final int THREAD_NUMBER = 8;
-    public static final BigInteger N = new BigInteger("1000");
-    public static final BigInteger BATCH_SIZE = new BigInteger("100");
+    public static final BigInteger N = new BigInteger("1000000");
+    public static final BigInteger BATCH_SIZE = new BigInteger("1000");
 
     public static void main(String[] args){
 
         long t0 = System.currentTimeMillis();
 
-        BigDecimal pi = solve(Main.SEED, Main.N, Main.EPSILON_POWER);
+        Solver solver = new Solver(EPSILON_POWER, SEED, N);
+
+        BigDecimal pi = solver.solve();
         System.out.println("PI: " + pi);
+        System.out.println("Repeated points: " + solver.getRepeatedPoints());
 
         long t1 = System.currentTimeMillis();
         System.out.println(t1-t0);
     }
 
-    private static BigDecimal solve(int seed, BigInteger n, int epsilonPower){
+    // private static BigDecimal solve(int seed, BigInteger n, int epsilonPower){
 
-        // Initialization
-        Point.setEpsilonPower(epsilonPower);
-        Random r = new Random(seed);
-        ExecutorService pool = Executors.newFixedThreadPool(Main.THREAD_NUMBER);
-        PIResult result = new PIResult(n);
-        AVLBSTree<Point, BigInteger> counter = new AVLBSTree<>();
+    //     // Initialization
+    //     Point.setEpsilonPower(epsilonPower);
+    //     Random r = new Random(seed);
+    //     ExecutorService pool = Executors.newFixedThreadPool(Main.THREAD_NUMBER);
+    //     PIResult result = new PIResult(n);
+    //     AVLBSTree<Point, BigInteger> counter = new AVLBSTree<>();
 
-        BigInteger numberOfTasks = n.divide(Main.BATCH_SIZE);
-        for(BigInteger i = BigInteger.ZERO; i.compareTo(numberOfTasks) == -1 ; i = i.add(BigInteger.ONE)){
-            Task t = new Task(r.nextInt(), BATCH_SIZE.intValue(), counter, result);
-            pool.execute(t);
-        }
+    //     BigInteger numberOfTasks = n.divide(Main.BATCH_SIZE);
+    //     for(BigInteger i = BigInteger.ZERO; i.compareTo(numberOfTasks) == -1 ; i = i.add(BigInteger.ONE)){
+    //         Task t = new Task(r.nextInt(), BATCH_SIZE.intValue(), counter, result);
+    //         pool.execute(t);
+    //     }
 
-        try {
-            pool.shutdown();
-            pool.awaitTermination(30, TimeUnit.DAYS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }finally {
-            // TODO: GET FINAL RESULT FROM PI AND TREE
-            return result.getResult();
-        }
-    }
+    //     try {
+    //         pool.shutdown();
+    //         pool.awaitTermination(30, TimeUnit.DAYS);
+    //     } catch (InterruptedException e) {
+    //         e.printStackTrace();
+    //     }finally {
+    //         // TODO: GET FINAL RESULT FROM PI AND TREE
+    //         return result.getResult();
+    //     }
+    // }
 
 //    public static void main(String[] args){
 //

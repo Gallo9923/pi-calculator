@@ -31,6 +31,7 @@ public class PIResult implements Counter{
         }
     }
 
+    @Override
     public BigDecimal getResult(){
         BigDecimal pi = (new BigDecimal(this.pointsInside).divide(new BigDecimal(this.n))).multiply(new BigDecimal(4));
         return pi;

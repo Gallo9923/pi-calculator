@@ -1,6 +1,7 @@
 package datastructures;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -11,7 +12,7 @@ import java.util.*;
  * @author Sebastian Garcia Acosta
  * @param <K,V>, any class that implements the Comparable interface
  */
-public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<List<V>>, Serializable {
+public class BinarySearchTree<K extends Comparable<K>, V> {
 	/**
 	 * 
 	 */
@@ -43,7 +44,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		protected Node<K, V> right;
 
 		/** V, the data that the Node encapsulates */
-		protected List<V> values;
+		protected BigInteger values;
 
 		/** K, the key */
 		protected K key;
@@ -56,8 +57,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		 * @param data, an object of a class K,V that implements Comparable interface
 		 */
 		public Node(K key, V data) {
-			this.values = new LinkedList<>();
-			this.values.add(data);
+			this.values = BigInteger.ZERO;
+			this.values = this.values.add((BigInteger) data);
 			this.left = null;
 			this.right = null;
 			this.parent = null;
@@ -99,7 +100,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		// count
 		for (int i = count; i < space; i++)
 			System.out.print(" ");
-		System.out.print(root.values + "\n");
+		System.out.print(root.key.toString() + " " + root.values + "\n");
 
 		// Process left child
 		print2DUtil(root.left, space);
@@ -175,7 +176,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		return (found != null);
 	}
 
-	public List<V> search(K key) {
+	public BigInteger search(K key) {
 		Node<K, V> found = searchNode(key);
 		return (found == null) ? null : found.values;
 	}
@@ -202,7 +203,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		} else if (cmp > 0) {
 			currentNode.right = add(currentNode.right, key, value);
 		} else {
-			currentNode.values.add(0, value); // Add duplicate element at the beginning in order to avoid extra
+			currentNode.values = currentNode.values.add(BigInteger.ONE); // Add duplicate element at the beginning in order to avoid extra
 												// iterations
 		}
 		return currentNode;
@@ -288,7 +289,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		return root == null;
 	}
 
-	public List<V> getRootData() {
+	public BigInteger getRootData() {
 		return this.root.values;
 	}
 
@@ -296,91 +297,90 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		this.root = null;
 	}
 
-	public List<V> inorder() {
-		List<V> list = new ArrayList<>();
+	public List<String> inorder() {
+		List<String> list = new ArrayList<>();
 		inorder(root, list);
 		return list;
 	}
 
-	private void inorder(Node<K, V> root, List<V> list) {
+	private void inorder(Node<K, V> root, List<String> list) {
 		if (root != null) {
 			inorder(root.left, list);
-			for (V value : root.values)
-				list.add(value);
+			list.add(root.key.toString() + " " + root.values.toString());
 			inorder(root.right, list);
 		}
 	}
 
-	public List<V> preorder() {
-		List<V> list = new ArrayList<>();
-		preorder(root, list);
-		return list;
-	}
+	// public List<V> preorder() {
+	// 	List<V> list = new ArrayList<>();
+	// 	preorder(root, list);
+	// 	return list;
+	// }
 
-	private void preorder(Node<K, V> root, List<V> list) {
-		if (root != null) {
-			for (V value : root.values)
-				list.add(value);
-			preorder(root.left, list);
-			preorder(root.right, list);
-		}
-	}
+	// private void preorder(Node<K, V> root, List<V> list) {
+	// 	if (root != null) {
+	// 		for (V value : root.values)
+	// 			list.add(value);
+	// 		preorder(root.left, list);
+	// 		preorder(root.right, list);
+	// 	}
+	// }
 
-	public List<V> preorderLookUp(String key, int maxSize) {
-		List<V> list = new LinkedList<>();
-		preorderLookUp(root, list, key.toString(), maxSize);
-		return list;
-	}
+	// public List<V> preorderLookUp(String key, int maxSize) {
+	// 	List<V> list = new LinkedList<>();
+	// 	preorderLookUp(root, list, key.toString(), maxSize);
+	// 	return list;
+	// }
 
-	private void preorderLookUp(Node<K, V> root, List<V> list, String key, int maxSize) {
+	// private void preorderLookUp(Node<K, V> root, List<V> list, String key, int maxSize) {
 
-		if (root != null) {
+	// 	if (root != null) {
 
-			key = key.toUpperCase();
+	// 		key = key.toUpperCase();
 
-			int keySize = key.length();
-			String currKey = root.key.toString().toUpperCase();
+	// 		int keySize = key.length();
+	// 		String currKey = root.key.toString().toUpperCase();
 			
-			String subCurrKey = currKey;
-			if(keySize <= currKey.length()) {
-				subCurrKey = currKey.substring(0, keySize).toUpperCase();
-			}
+	// 		String subCurrKey = currKey;
+	// 		if(keySize <= currKey.length()) {
+	// 			subCurrKey = currKey.substring(0, keySize).toUpperCase();
+	// 		}
 			
 
-			if (list.size() >= maxSize) {
-				list = list.subList(0, maxSize);
-				return;
-			}
+	// 		if (list.size() >= maxSize) {
+	// 			list = list.subList(0, maxSize);
+	// 			return;
+	// 		}
 
-			if (subCurrKey.equalsIgnoreCase(key)) {
-				list.addAll(root.values);
-			}
+	// 		if (subCurrKey.equalsIgnoreCase(key)) {
+	// 			list.addAll(root.values);
+	// 		}
 
-			if ((int) key.compareTo(subCurrKey) <= 0) {
-				preorderLookUp(root.left, list, key, maxSize);
-			}
+	// 		if ((int) key.compareTo(subCurrKey) <= 0) {
+	// 			preorderLookUp(root.left, list, key, maxSize);
+	// 		}
 
-			if ((int) key.compareTo(subCurrKey) >= 0) {
-				preorderLookUp(root.right, list, key, maxSize);
-			}
+	// 		if ((int) key.compareTo(subCurrKey) >= 0) {
+	// 			preorderLookUp(root.right, list, key, maxSize);
+	// 		}
 
-		}
-	}
+	// 	}
+	// }
 
-	public List<V> postorder() {
-		List<V> list = new ArrayList<>();
-		postorder(root, list);
-		return list;
-	}
+	// public List<V> postorder() {
+	// 	List<V> list = new ArrayList<>();
+	// 	postorder(root, list);
+	// 	return list;
+	// }
 
-	private void postorder(Node<K, V> root, List<V> list) {
-		if (root != null) {
-			postorder(root.left, list);
-			postorder(root.right, list);
-			for (V value : root.values)
-				list.add(value);
-		}
-	}
+	// private void postorder(Node<K, V> root, List<V> list) {
+	// 	if (root != null) {
+	// 		postorder(root.left, list);
+	// 		postorder(root.right, list);
+	// 		for (V value : root.values)
+	// 			list.add(value);
+	// 	}
+	// }
 
 	/**
 	 * Rotates the given subtree to the right.
@@ -412,54 +412,54 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<Li
 		return y;
 	}
 
-	@Override
-	public Iterator<List<V>> iterator() {
-		return new InorderIterator();
-	}
+	// @Override
+	// public Iterator<List<V>> iterator() {
+	// 	return new InorderIterator();
+	// }
 
 	/* Iterator */
-	private class InorderIterator implements Iterator<List<V>> {
-		/** The nodes that are still to be visited. */
-		private Stack<Node<K, V>> stack;
+	// private class InorderIterator implements Iterator<List<V>> {
+	// 	/** The nodes that are still to be visited. */
+	// 	private Stack<Node<K, V>> stack;
 
-		/** Construct. */
-		private InorderIterator() {
-			stack = new Stack<Node<K, V>>();
-			pushPathToMin(root);
-		}
+	// 	/** Construct. */
+	// 	private InorderIterator() {
+	// 		stack = new Stack<Node<K, V>>();
+	// 		pushPathToMin(root);
+	// 	}
 
-		/**
-		 * Push all the nodes in the path from a given node to the leftmost node in the
-		 * subtree.
-		 */
-		private void pushPathToMin(Node<K, V> localRoot) {
-			Node<K, V> current = localRoot;
-			while (current != null) {
-				stack.push(current);
-				current = current.left;
-			}
-		}
+	// 	/**
+	// 	 * Push all the nodes in the path from a given node to the leftmost node in the
+	// 	 * subtree.
+	// 	 */
+	// 	private void pushPathToMin(Node<K, V> localRoot) {
+	// 		Node<K, V> current = localRoot;
+	// 		while (current != null) {
+	// 			stack.push(current);
+	// 			current = current.left;
+	// 		}
+	// 	}
 
-		/** Is there another element in this iterator? */
-		public boolean hasNext() {
-			return !stack.isEmpty();
-		}
+	// 	/** Is there another element in this iterator? */
+	// 	public boolean hasNext() {
+	// 		return !stack.isEmpty();
+	// 	}
 
-		/**
-		 * The next element in this iterator; Advance the iterator.
-		 */
-		public List<V> next() {
-			Node<K, V> node = stack.peek();
-			stack.pop();
-			pushPathToMin(node.right);
-			return node.values;
-		}
+	// 	/**
+	// 	 * The next element in this iterator; Advance the iterator.
+	// 	 */
+	// 	public List<V> next() {
+	// 		Node<K, V> node = stack.peek();
+	// 		stack.pop();
+	// 		pushPathToMin(node.right);
+	// 		return node.values;
+	// 	}
 
-		/** (Don't) remove an element from this iterator. */
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-	}
+	// 	/** (Don't) remove an element from this iterator. */
+	// 	public void remove() {
+	// 		throw new UnsupportedOperationException();
+	// 	}
+	// }
 
 	@Override
 	public String toString() {
