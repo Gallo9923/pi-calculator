@@ -2,29 +2,76 @@ package ui;
 
 import model.Solver;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class Main {
 
-    public static final int EPSILON_POWER = 3;
-    public static final int SEED = 9923;
+    // public static final int EPSILON_POWER = 3;
+    // public static final int SEED = 9923;
+
     public static final int THREAD_NUMBER = 8;
-    public static final BigInteger N = new BigInteger("1000000");
-    public static final BigInteger BATCH_SIZE = new BigInteger("1000");
+    // public static final BigInteger N = new BigInteger("10000000");  // 10^7 tiempo limite
+    public static final BigInteger BATCH_SIZE = new BigInteger("10000");
+
+    private static int epsilon;
+    private static int seed;
+    private static int n;
 
     public static void main(String[] args){
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        boolean exit = false;
+
+        while(!exit) {
+            System.out.println("------------- WELCOME TO PI CALCULATOR -------------\n"
+                         + "1. SET SEED FOR RANDOM NUMBER GENERATOR.\n"
+                         + "2. SET POWER OF 10 FOR NUMBERS TO GENERATE.\n"
+                         + "3. SET EPSILON TO CALCULATE REPEATED NUMBERS.\n"
+                         + "4. CALCULATE PI.");
+            
+            try {
+                int sel = Integer.valueOf(reader.readLine());
+
+                switch (sel) {
+                    case 1:
+                        System.out.print("SEED: ");
+                        seed = Integer.valueOf(reader.readLine());
+                        break;
+                    case 2:
+                        System.out.print("10^N POWER: ");
+                        n = Math.abs(Integer.valueOf(reader.readLine()));
+                        break;
+                    case 3:
+                        System.out.print("EPSILON: ");
+                        epsilon = Math.abs(Integer.valueOf(reader.readLine()));
+                        break;
+                    case 4:
+                        System.out.println("Calculating PI...");
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("Unknown option :(");
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         long t0 = System.currentTimeMillis();
 
-        Solver solver = new Solver(EPSILON_POWER, SEED, N);
+        Solver solver = new Solver(epsilon, seed, new BigInteger("10").pow(n));
 
         BigDecimal pi = solver.solve();
         System.out.println("PI: " + pi);
-        System.out.println("Repeated points: " + solver.getRepeatedPoints());
+        System.out.println("Repeated points %: " + solver.getRepeatedPoints());
 
         long t1 = System.currentTimeMillis();
-        System.out.println(t1-t0);
+        System.out.println("Time taken: " + (t1-t0));
     }
 
     // private static BigDecimal solve(int seed, BigInteger n, int epsilonPower){
