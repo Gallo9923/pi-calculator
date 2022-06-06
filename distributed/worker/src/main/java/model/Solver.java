@@ -17,10 +17,10 @@ public class Solver {
 
     private final int epsilonPower;
     private final int seed;
-    private final BigInteger n;
+    private final int n;
     private RepeatedCounter repCounter;
 
-    public Solver(int epsilonPower, int seed, i n) {
+    public Solver(int epsilonPower, int seed, int n) {
         this.epsilonPower = epsilonPower;
         this.seed = seed;
         this.n = n;

@@ -24,11 +24,14 @@ public class PiControllerI implements PiController {
     @Override
     public Task getTask(Current current) {
         System.out.println("getTask");
+        // TODO: retrieve task from DB
         return null;
     }
 
     @Override
     public void notifyResult(TaskResult taskResult, Current current) {
         System.out.println("notifyResult");
+
+        //this.spofly.addPartialResult(taskResult.getPointsInside());
     }
 }
