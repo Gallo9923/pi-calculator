@@ -29,9 +29,13 @@ public class PiControllerI implements PiController {
     }
 
     @Override
-    public void notifyResult(TaskResult taskResult, Current current) {
-        System.out.println("notifyResult");
-
-        //this.spofly.addPartialResult(taskResult.getPointsInside());
+    public void setTaskResult(TaskResult taskResult, Current current) {
+        System.out.println("setTaskResult");
     }
+
+    @Override
+    public void notifyPiResult(Job job, Current current) {
+        System.out.println("notifyPiResult");
+    }
+
 }

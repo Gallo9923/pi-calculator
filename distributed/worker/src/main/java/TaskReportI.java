@@ -40,7 +40,7 @@ public class TaskReportI implements Pi.TaskReport {
         Random r = new Random(task.seed);
         ExecutorService pool = Executors.newFixedThreadPool(THREAD_NUMBER);
 
-        int numberOfTasks = task.batchPoints / BATCH_SIZE;
+        int numberOfTasks = task.batchSize / BATCH_SIZE;
         for (int i = 0; i < numberOfTasks; i++) {
             Task t = new Task(r.nextInt(), BATCH_SIZE, null, result);
             pool.execute(t);
@@ -55,7 +55,7 @@ public class TaskReportI implements Pi.TaskReport {
             int pointsInside = result.getResult();
             TaskResult taskResult = new TaskResult(task.jobId, pointsInside);
 
-            piControllerPrx.notifyResult(taskResult);
+            piControllerPrx.setTaskResult(taskResult);
         }
 
         this.state = State.IDLE;

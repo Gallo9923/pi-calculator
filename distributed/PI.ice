@@ -21,30 +21,25 @@ module Pi {
         Time totalTime;
     }
 
-    interface Client
-    {
-        void setResult(Result result);
-    }
+
 
     class Task
     {
+        string id;
         string jobId;
-        int batchPoints;
-        short epsilonPower;
         long seed;
+        int batchSize;
+        string createDate;
+        string state;
+        string batchNumber;
+        int result;
+        short epsilonPower;
     }
 
     class TaskResult
     {
-        string jobId;
+        string taskId;
         int pointsInside;
-    }
-
-    interface PiController
-    {
-        void calculatePi(PiRequest request, Client* clientProxy);
-        Task getTask();
-        void notifyResult(TaskResult taskResult);
     }
 
     class Job
@@ -69,13 +64,24 @@ module Pi {
         string pi;
     }
 
+    interface Client
+    {
+        void setResult(Result result);
+    }
+
+    interface PiController
+    {
+        void calculatePi(PiRequest request, Client* clientProxy);
+        Task getTask();
+        void setTaskResult(TaskResult taskResult);
+        void notifyPiResult(Job job);
+    }
+
     interface Repository
     {
         Job createsJob(Job job);
-        bool verifyPendingTasks();
-        void addIntermediateResult(TaskResult taskResult);
-        Job getJob(string jobId);
-        void setJobResult(JobResult job);
+        Task getTask();
+        void setTaskResult(TaskResult taskResult);
     }
 
     interface TaskReport

@@ -1,9 +1,12 @@
 import Pi.Job;
 import Pi.JobResult;
+import Pi.Task;
 import Pi.TaskResult;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Current;
 import table.JobTable;
+
+import java.util.concurrent.Semaphore;
 
 public class RepositoryI implements Pi.Repository{
 
@@ -11,36 +14,39 @@ public class RepositoryI implements Pi.Repository{
 
     private String jobTableName;
 
+    private static final int PENDING_TASK_SEMAPHORE_PERMITS = 1;
+    private Semaphore pendingTaskSemaphore;
+    private static final int COUNTER_POINT_SEMAPHORE_PERMITS = 1;
+    private Semaphore counterPointsSemaphore;
+
+
     public RepositoryI(Communicator communicator){
         this.communicator = communicator;
         this.jobTableName = communicator.getProperties().getProperty("JobTableName");
+
+        this.pendingTaskSemaphore = new Semaphore(RepositoryI.PENDING_TASK_SEMAPHORE_PERMITS);
+        this.counterPointsSemaphore = new Semaphore(RepositoryI.COUNTER_POINT_SEMAPHORE_PERMITS);
     }
 
     @Override
     public Job createsJob(Job job, Current current) {
+
         JobTable jobTable = new JobTable(this.jobTableName);
-        jobTable.create(job.nPower + "", job.seed + "", job.epsilonPower + "", job.startDate, job.finishDate, job.taskCounter, job.pointsInside, job.clientProxy);
+        String id = jobTable.create(job.nPower + "", job.seed + "", job.epsilonPower + "", job.startDate, job.finishDate, job.taskCounter, job.pointsInside, job.clientProxy);
+        job.id = id;
+        return job;
+    }
 
+    @Override
+    public Task getTask(Current current) {
+        System.out.println("getTask");
         return null;
     }
 
     @Override
-    public boolean verifyPendingTasks(Current current) {
-        return false;
+    public void setTaskResult(TaskResult taskResult, Current current) {
+        System.out.println("setTaskResult");
     }
 
-    @Override
-    public void addIntermediateResult(TaskResult taskResult, Current current) {
 
-    }
-
-    @Override
-    public Job getJob(String jobId, Current current) {
-        return null;
-    }
-
-    @Override
-    public void setJobResult(JobResult job, Current current) {
-
-    }
 }
