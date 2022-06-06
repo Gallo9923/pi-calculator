@@ -1,10 +1,13 @@
+import Pi.TaskReportPrx;
+import com.zeroc.Ice.Communicator;
+
 public class Controller {
     public static void main(String[] args)
     {
         int status = 0;
         java.util.List<String> extraArgs = new java.util.ArrayList<String>();
 
-        try(com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, extraArgs))
+        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, extraArgs))
         {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> communicator.destroy()));
@@ -16,10 +19,13 @@ public class Controller {
             }
             else
             {
+
+                TaskReportPrx taskReportPrx = getPublisher(communicator);
+
                 com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiController");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
                 com.zeroc.Ice.Identity id = com.zeroc.Ice.Util.stringToIdentity(properties.getProperty("Identity"));
-                adapter.add(new PiControllerI(), id);
+                adapter.add(new PiControllerI(taskReportPrx), id);
                 adapter.activate();
 
                 communicator.waitForShutdown();
@@ -28,4 +34,33 @@ public class Controller {
 
         System.exit(status);
     }
+
+    private static TaskReportPrx getPublisher(Communicator communicator){
+        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("IceStorm/TopicManager:tcp -p 9999");
+        com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
+        com.zeroc.IceStorm.TopicPrx topic = null;
+        while(topic == null)
+        {
+            try
+            {
+                topic = topicManager.retrieve("Tasks");
+            }
+            catch(com.zeroc.IceStorm.NoSuchTopic ex1)
+            {
+                try
+                {
+                    topic = topicManager.create("Tasks");
+                }
+                catch(com.zeroc.IceStorm.TopicExists ex2)
+                {
+                    // Another client created the topic.
+                }
+            }
+        }
+
+        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_oneway();
+        TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
+        return publisher;
+    }
+
 }

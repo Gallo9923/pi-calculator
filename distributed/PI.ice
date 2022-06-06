@@ -30,6 +30,7 @@ module Pi {
     {
         string jobId;
         int batchPoints;
+        short epsilonPower;
         long seed;
     }
 
@@ -80,10 +81,6 @@ module Pi {
     interface TaskReport
     {
         void notifyTaskAvailable();
-    }
-
-    interface Worker
-    {
     }
 
 }

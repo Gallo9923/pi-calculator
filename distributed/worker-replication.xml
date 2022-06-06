@@ -21,7 +21,7 @@
 
         <replica-group id="ReplicatedPiWorkerAdapter">
             <load-balancing type="round-robin"/>
-            <object identity="piworker" type="::Pi::Worker"/>
+            <object identity="piworker" type="::Pi::TaskReport"/>
         </replica-group>
 
         <node name="node1">

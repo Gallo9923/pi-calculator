@@ -72,7 +72,11 @@ public class Client
                         break;
                     case 4:
                         System.out.println("Calculating PI...");
-                        PiControllerPrx piControllerPrx = Client.getPiControllerPrx(communicator);
+                        PiControllerPrx piControllerPrx = null;
+                        do {
+                            piControllerPrx = getPiControllerPrx(communicator);
+                        }while(piControllerPrx == null);
+
                         Client.calculataPi(piControllerPrx, clientPrx);
                         break;
                     default:

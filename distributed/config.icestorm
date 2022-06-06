@@ -1,0 +1,4 @@
+IceStorm.InstanceName=PiIceStorm
+
+IceStorm.TopicManager.Endpoints=default -h hgrid2 -p 8090
+IceStorm.Publish.Endpoints=tcp -h hgrid2 -p 8099: udp -h hgrid2 -p 8099
