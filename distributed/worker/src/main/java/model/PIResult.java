@@ -9,21 +9,18 @@ public class PIResult implements Counter{
     private static final int MAX_AVAILABLE = 1;
 
     private final Semaphore semaphore;
-    private BigInteger pointsInside;
-    private BigInteger n;
+    private int pointsInside;
 
-    public PIResult(BigInteger n){
+    public PIResult(){
         this.semaphore = new Semaphore(PIResult.MAX_AVAILABLE, true);
-        this.pointsInside = BigInteger.ZERO;
-
-        this.n = n;
+        this.pointsInside = 0;
     }
 
     @Override
     public void add(int q){
         try {
             this.semaphore.acquire();
-            this.pointsInside  = this.pointsInside.add(new BigInteger(q + ""));
+            this.pointsInside += q;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }finally {
@@ -32,9 +29,8 @@ public class PIResult implements Counter{
     }
 
     @Override
-    public BigDecimal getResult(){
-        BigDecimal pi = (new BigDecimal(this.pointsInside).divide(new BigDecimal(this.n))).multiply(new BigDecimal(4));
-        return pi;
+    public int getResult(){
+        return this.pointsInside;
     }
 
 }
