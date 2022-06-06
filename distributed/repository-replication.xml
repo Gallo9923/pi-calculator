@@ -1,0 +1,42 @@
+<!-- Copyright (c) ZeroC, Inc. All rights reserved. -->
+
+<icegrid>
+
+    <application name="PiRepository">
+
+        <server-template id="PiRepositoryTemplate">
+            <parameter name="index"/>
+            <server id="PiRepositoryServer-${index}" exe="java" activation="on-demand">
+                <option>-jar</option>
+                <option>controller/build/libs/repository.jar</option>
+                <adapter name="PiWorker" endpoints="tcp -h localhost" replica-group="ReplicatedPiRepositoryAdapter"/>
+                <property name="Identity" value="pirepository"/>
+
+                <property name="IceMX.Metrics.Debug.GroupBy" value="id"/>
+                <property name="IceMX.Metrics.Debug.Disabled" value="1"/>
+                <property name="IceMX.Metrics.ByParent.GroupBy" value="parent"/>
+                <property name="IceMX.Metrics.ByParent.Disabled" value="1"/>
+            </server>
+        </server-template>
+
+        <replica-group id="ReplicatedPiRepositoryAdapter">
+            <load-balancing type="round-robin"/>
+            <object identity="pirepository" type="::Pi::Repository"/>
+        </replica-group>
+
+        <node name="node1">
+            <server-instance template="PiWorkerTemplate" index="1"/>
+        </node>
+        <node name="node2">
+            <server-instance template="PiWorkerTemplate" index="2"/>
+        </node>
+        <node name="node3">
+            <server-instance template="PiWorkerTemplate" index="3"/>
+        </node>
+        <node name="node4">
+            <server-instance template="PiWorkerTemplate" index="4"/>
+        </node>
+
+    </application>
+
+</icegrid>
