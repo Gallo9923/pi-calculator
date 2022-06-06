@@ -9,7 +9,7 @@
             <server id="PiRepositoryServer-${index}" exe="java" activation="on-demand">
                 <option>-jar</option>
                 <option>controller/build/libs/repository.jar</option>
-                <adapter name="PiWorker" endpoints="tcp -h localhost" replica-group="ReplicatedPiRepositoryAdapter"/>
+                <adapter name="PiWorker" endpoints="tcp -h ${host} -p ${port}" replica-group="ReplicatedPiRepositoryAdapter"/>
                 <property name="Identity" value="pirepository"/>
 
                 <property name="IceMX.Metrics.Debug.GroupBy" value="id"/>
@@ -24,19 +24,9 @@
             <object identity="pirepository" type="::Pi::Repository"/>
         </replica-group>
 
-        <node name="node1">
-            <server-instance template="PiWorkerTemplate" index="1"/>
+        <node name="node7">
+            <server-instance template="PiWorkerTemplate" index="1" port="9010" host="hgrid2"/>
         </node>
-        <node name="node2">
-            <server-instance template="PiWorkerTemplate" index="2"/>
-        </node>
-        <node name="node3">
-            <server-instance template="PiWorkerTemplate" index="3"/>
-        </node>
-        <node name="node4">
-            <server-instance template="PiWorkerTemplate" index="4"/>
-        </node>
-
     </application>
 
 </icegrid>

@@ -1,3 +1,0 @@
-# TODO: SET the registryhost
-Ice.Default.Locator=PiIceGrid/Locator:tcp -h localhost -p 4061
-# Ice.Default.Locator=PiIceGrid/Locator:tcp -h registryhost -p 4061

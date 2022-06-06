@@ -28,7 +28,7 @@ public class Client
             }
 
             com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Client");
-            adapter.add(new ClientI(), com.zeroc.Ice.Util.stringToIdentity("observer"));
+            adapter.add(new ClientI(), com.zeroc.Ice.Util.stringToIdentity("client"));
             adapter.activate();
 
             ClientPrx clientPrx =  Pi.ClientPrx.uncheckedCast(adapter.createProxy(com.zeroc.Ice.Util.stringToIdentity("client")));

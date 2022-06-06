@@ -9,7 +9,7 @@
             <server id="PiControllerServer-${index}" exe="java" activation="on-demand">
                 <option>-jar</option>
                 <option>controller/build/libs/controller.jar</option>
-                <adapter name="PiController" endpoints="tcp -h localhost" replica-group="ReplicatedPiControllerAdapter"/>
+                <adapter name="PiController" endpoints="tcp -h ${host} -p ${port}" replica-group="ReplicatedPiControllerAdapter"/>
                 <property name="Identity" value="picontroller"/>
 
                 <property name="IceMX.Metrics.Debug.GroupBy" value="id"/>
@@ -25,10 +25,10 @@
         </replica-group>
 
         <node name="node5">
-            <server-instance template="PiControllerTemplate" index="1"/>
+            <server-instance template="PiControllerTemplate" index="1" port="9075" host="hgrid14"/>
         </node>
         <node name="node6">
-            <server-instance template="PiControllerTemplate" index="2"/>
+            <server-instance template="PiControllerTemplate" index="2" port="9075" host="hgrid15"/>
         </node>
     </application>
 
