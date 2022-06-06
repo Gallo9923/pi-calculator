@@ -10,6 +10,8 @@ import java.sql.SQLException;
 public class PostgresqlConnection implements DatabaseConnection{
 
     private static String connectionString = null;
+    private static String user = null;
+    private static String password = null;
 
     @Override
     public Connection getConnection() {
@@ -23,8 +25,10 @@ public class PostgresqlConnection implements DatabaseConnection{
         connect();
     }
 
-    public static void configure(String connectionString){
+    public static void configure(String connectionString, String user, String password){
         PostgresqlConnection.connectionString = connectionString;
+        PostgresqlConnection.user = user;
+        PostgresqlConnection.password = password;
     }
 
     public static PostgresqlConnection getInstance(){
@@ -37,7 +41,7 @@ public class PostgresqlConnection implements DatabaseConnection{
 
     public void connect(){
         try {
-            this.connection = DriverManager.getConnection(PostgresqlConnection.connectionString);
+            this.connection = DriverManager.getConnection(connectionString, user, password);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

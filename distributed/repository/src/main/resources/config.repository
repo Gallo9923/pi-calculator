@@ -1,2 +1,4 @@
-ConexionBD = jdbc:postgresql://xhgrid2:5432/PiBD
+ConexionBD = jdbc:postgresql://xhgrid2:5432/pibd
+BDuser = postgres
+BDpassword = postgres
 JobTableName = JOB

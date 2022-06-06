@@ -24,7 +24,9 @@ public class Repository {
                 // Configure DB Connection String
                 Properties p = communicator.getProperties();
                 String connectionString = p.getProperty("ConexionBD");
-                PostgresqlConnection.configure(connectionString);
+                String user = p.getProperty("BDuser");
+                String password = p.getProperty("BDpassword");
+                PostgresqlConnection.configure(connectionString, user, password);
 
                 com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Repository");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();

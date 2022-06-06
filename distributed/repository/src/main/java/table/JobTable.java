@@ -17,7 +17,7 @@ public class JobTable {
         Connection con =  PostgresqlConnection.getInstance().getConnection();
 
         try {
-            String sqlInsert = "INSERT INTO" + this.tableName +" (N_POWER, SEED, EPSILON_POWER, START_DATE, FINISH_DATE, TASK_COUNTER, POINTS_INSIDE, CLIENT_PROXY) VALUES (\n" +
+            String sqlInsert = "INSERT INTO " + this.tableName +" (N_POWER, SEED, EPSILON_POWER, START_DATE, FINISH_DATE, TASK_COUNTER, POINTS_INSIDE, CLIENT_PROXY) VALUES (\n" +
                     "'" + nPower + "',\n" +
                     "'" + seed + "',\n" +
                     "'" + epsilonPower + "',\n" +
@@ -27,27 +27,16 @@ public class JobTable {
                     "'" + pointsInside + "',\n" +
                     "'" + clientProxy + "')";
 
-            PreparedStatement statement = con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 
-            ResultSet result = statement.getGeneratedKeys();
+            PreparedStatement ps = con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 
-            if(result.next() && result != null){
-                System.out.println("Key: " + result.getInt(1));
-                response = result.getInt(1) + "";
-            } else {
-                System.out.println(this.tableName + "No Key");
+            ps.execute();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            int id = -1;
+            if (rs.next()) {
+                response = rs.getInt(1) + "";
             }
-
-//            Statement statement = con.createStatement();
-//            ResultSet rs = statement.executeQuery("INSERT INTO" + this.tableName +" (N_POWER, SEED, EPSILON_POWER, START_DATE, FINISH_DATE, TASK_COUNTER, POINTS_INSIDE, CLIENT_PROXY) VALUES (\n" +
-//                    "'" + nPower + "',\n" +
-//                    "'" + seed + "',\n" +
-//                    "'" + epsilonPower + "',\n" +
-//                    "'" + startDate + "',\n" +
-//                    "'" + finishDate + "',\n" +
-//                    "'" + taskCounter + "',\n" +
-//                    "'" + pointsInside + "',\n" +
-//                    "'" + clientProxy + "')");
 
         } catch (SQLException throwables) {
             System.out.println(this.tableName + " " + throwables.getMessage());
