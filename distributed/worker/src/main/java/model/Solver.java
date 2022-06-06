@@ -13,14 +13,14 @@ public class Solver {
 
     public static final int THREAD_NUMBER = 8;
     // TODO: Change this
-    public static final BigInteger BATCH_SIZE = 1000;
+    public static final BigInteger BATCH_SIZE = new BigInteger("1000");
 
     private final int epsilonPower;
     private final int seed;
     private final BigInteger n;
     private RepeatedCounter repCounter;
 
-    public Solver(int epsilonPower, int seed, i n) {
+    public Solver(int epsilonPower, int seed, BigInteger n) {
         this.epsilonPower = epsilonPower;
         this.seed = seed;
         this.n = n;

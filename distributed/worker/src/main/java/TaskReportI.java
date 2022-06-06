@@ -23,7 +23,7 @@ public class TaskReportI implements Pi.TaskReport {
         Task task = piControllerPrx.getTask();
 
 
-        Solver solver = new Solver(task.epsilonPower, task.seed, task.batchPoints);
+        //Solver solver = new Solver(task.epsilonPower, task.seed, task.batchPoints);
 
     }
 }

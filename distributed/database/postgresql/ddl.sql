@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS JOB CASCADE;
+
+-- JOB
+CREATE TABLE JOB(
+   ID serial NOT NULL,
+   N_POWER smallint NOT NULL,
+   SEED bigint NOT NULL,
+   EPSILON_POWER smallint NOT NULL,
+   START_DATE timestamp without time zone NOT NULL,
+   FINISH_DATE timestamp without time zone NOT NULL,
+   TASK_COUNTER varchar NOT NULL,
+   POINTS_INSIDE varchar NOT NULL,
+   CLIENT_PROXY varchar NOT NULL,
+   REP_NUMBERS double precision
+);
+
+ALTER TABLE ESTUDIANTE ADD CONSTRAINT JOB_PK PRIMARY KEY (ID);

@@ -1,0 +1,2 @@
+ConexionBD = jdbc:postgresql://xhgrid2:5432/PiBD
+JobTableName = JOB
