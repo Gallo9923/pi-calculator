@@ -2,7 +2,10 @@ package table;
 
 import connection.PostgresqlConnection;
 
+import Pi.Task;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskTable {
 
@@ -27,7 +30,6 @@ public class TaskTable {
                     "'" + result + "',\n" +
                     "'" + epsilonPower + "')";
 
-
             PreparedStatement ps = con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
 
             ps.execute();
@@ -45,29 +47,120 @@ public class TaskTable {
         return response;
     }
 
-    public String getPendingTasks(){
-        //String response = this.tableName + " - INSERT SUCCESSFUL";
+    public List<Task> getPendingTasks(){
         Connection con =  PostgresqlConnection.getInstance().getConnection();
+
+        List<Task> pendingTasks = new ArrayList<>();
 
         try {
             Statement statement = con.createStatement();
-            statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE STATE = 'IN_PROGRESS'");
+            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE STATE = 'IN_PROGRESS'");
+
+            if(rs.next()){
+                String taskId = rs.getString("ID");
+                String jobId = rs.getString("JOB_ID");
+                long seed = Long.parseLong(rs.getString("SEED"));
+                int batchSize = Integer.parseInt(rs.getString("BATCH_SIZE"));
+                String createDate = rs.getString("CREATE_DATE");
+                String state = rs.getString("STATE");
+                String batchNumber = rs.getString("BATCH_NUMBER");
+                int result = Integer.parseInt(rs.getString("RESULT"));
+                short nPower = Short.parseShort(rs.getString("N_POWER"));
+
+                Task task = new Task(taskId, jobId, seed, batchSize, createDate, state, batchNumber, result, nPower);
+
+                pendingTasks.add(task);
+            }
         } catch (SQLException throwables) {
-            response = this.tableName + " " + throwables.getMessage();
+            throwables.getMessage();
+        }
+
+        return pendingTasks;
+    }
+
+    public Task getTaskById(String id) {
+        Connection con =  PostgresqlConnection.getInstance().getConnection();
+
+        Task task = null;
+
+        try {
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE ID = " + id);
+
+            if(rs.next()){
+                String taskId = rs.getString("ID");
+                String jobId = rs.getString("JOB_ID");
+                long seed = Long.parseLong(rs.getString("SEED"));
+                int batchSize = Integer.parseInt(rs.getString("BATCH_SIZE"));
+                String createDate = rs.getString("CREATE_DATE");
+                String state = rs.getString("STATE");
+                String batchNumber = rs.getString("BATCH_NUMBER");
+                int result = Integer.parseInt(rs.getString("RESULT"));
+                short nPower = Short.parseShort(rs.getString("N_POWER"));
+
+                task = new Task(taskId, jobId, seed, batchSize, createDate, state, batchNumber, result, nPower);
+            }
+        } catch (SQLException throwables) {
+            throwables.getMessage();
+        }
+
+        return task;
+    }
+
+    public String setTaskState(String id, String state) {
+        String response = "";
+        Connection con =  PostgresqlConnection.getInstance().getConnection();
+
+        try {
+            String sqlUpdate = "UPDATE " + this.tableName + " SET STATE = ? WHERE ID = ?";
+
+            PreparedStatement ps = con.prepareStatement(sqlUpdate);
+
+            ps.setString(1, state);
+            ps.setString(2, id);
+
+            int status = ps.executeUpdate();
+
+            if (status == 1) {
+                response = this.tableName + " - UPDATE SUCCESSFUL";
+            }
+
+            //Statement statement = con.createStatement();
+            //statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + " WHERE ID = " + id);
+
+        } catch (SQLException throwables) {
+            System.out.println(this.tableName + " " + throwables.getMessage());
         }
 
         return response;
     }
 
-    public String getTaskById(String id) {
+    public String setTaskResult(String id, String state, String result) {
+        String response = "";
+        Connection con =  PostgresqlConnection.getInstance().getConnection();
 
-    }
+        try {
+            String sqlUpdate = "UPDATE " + this.tableName + " SET STATE = ?, RESULT = ? WHERE ID = ?";
 
-    public String setTaskState(String state) {
+            PreparedStatement ps = con.prepareStatement(sqlUpdate);
 
-    }
+            ps.setString(1, state);
+            ps.setString(2, result);
+            ps.setString(3, id);
 
-    public String setTaskResult(String state, String result) {
+            int status = ps.executeUpdate();
 
+            if (status == 1) {
+                response = this.tableName + " - UPDATE SUCCESSFUL";
+            }
+
+            //Statement statement = con.createStatement();
+            //statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + ", RESULT = " + result + " WHERE ID = " + id);
+
+        } catch (SQLException throwables) {
+            System.out.println(this.tableName + " " + throwables.getMessage());
+        }
+
+        return response;
     }
 }
