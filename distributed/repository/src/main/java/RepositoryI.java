@@ -69,22 +69,28 @@ public class RepositoryI implements Pi.Repository{
             taskTable.setTaskState(task.id, TaskState.IN_PROGRESS.toString());
 
         }else{
-            // TODO: Start Transaction
             Job job = jobTable.getJobById(jobId);
-            BigInteger batchNumber = new BigInteger(job.taskCounter).add(BigInteger.ONE);
 
-            job.taskCounter = batchNumber.toString();
-            jobTable.updateTaskCounter(job.id, job.taskCounter);
+            BigInteger taskCounter = new BigInteger(job.taskCounter);
+            BigInteger n = new BigInteger("10").pow(job.nPower);
+            BigInteger batchSize = new BigInteger(job.batchSize + "");
+            if ( taskCounter.compareTo(n.divide(batchSize)) == -1){
+                // TODO: Start Transaction
+                taskCounter = new BigInteger(job.taskCounter).add(BigInteger.ONE);
+                job.taskCounter = taskCounter.toString();
+                jobTable.updateTaskCounter(job.id, job.taskCounter);
 
-            LocalDateTime createDate = LocalDateTime.now();
-            String taskId = taskTable.create(jobId, job.seed + "", job.batchSize + "", createDate.toString(), TaskState.IN_PROGRESS + "", batchNumber.toString(), "0", job.epsilonPower + "");
+                LocalDateTime createDate = LocalDateTime.now();
+                String taskId = taskTable.create(jobId, job.seed + "", job.batchSize + "", createDate.toString(), TaskState.IN_PROGRESS + "", taskCounter.toString(), "0", job.epsilonPower + "");
 
-            task = new Task(taskId, job.id, job.seed, job.batchSize, createDate.toString(), TaskState.IN_PROGRESS.toString(), batchNumber.toString(), 0, job.epsilonPower);
-            // TODO: END Transaction
-
+                task = new Task(taskId, job.id, job.seed, job.batchSize, createDate.toString(), TaskState.IN_PROGRESS.toString(), taskCounter.toString(), 0, job.epsilonPower);
+                // TODO: END Transaction
+            }
         }
 
-        // TODO: SET TASK TIMEOUT  !!!!!VERY IMPORTANT!!!!
+        if (task != null){
+            // TODO: SET TASK TIMEOUT  !!!!!VERY IMPORTANT!!!!
+        }
 
         return task;
     }
