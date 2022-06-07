@@ -11,8 +11,6 @@ public class PiControllerI implements PiController {
     private RepositoryPrx repositoryPrx;
     private Communicator communicator;
 
-    private Job currentJob;
-
     public PiControllerI(TaskReportPrx taskReportPrx, RepositoryPrx repositoryPrx, Communicator communicator){
         this.taskReportPrx = taskReportPrx;
         this.repositoryPrx = repositoryPrx;
@@ -36,17 +34,17 @@ public class PiControllerI implements PiController {
         Job job = new Job("", request.nPower, request.seed, 0.0, request.epsilonPower, LocalDateTime.now().toString(), "", "0", "0", clientProxy.toString(), jobBatchSize, "0");
 
         // Guardar BD
-        currentJob = repositoryPrx.createsJob(job);
+        Job currentJob = repositoryPrx.createsJob(job);
 
         // Notificar
-        taskReportPrx.notifyTaskAvailable();
+        taskReportPrx.notifyTaskAvailable(currentJob.id);
     }
 
     @Override
-    public Task getTask(Current current) {
+    public Task getTask(String jobId, Current current) {
 
         System.out.println("getTask");
-        return repositoryPrx.getTask(currentJob.id);
+        return repositoryPrx.getTask(jobId);
     }
 
     @Override

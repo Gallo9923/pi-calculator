@@ -33,7 +33,7 @@ public class Checker implements Runnable {
             Task task = taskTable.getTaskById(this.taskId);
             if (task.state.equals(TaskState.IN_PROGRESS.toString())){
                 taskTable.setTaskState(taskId, TaskState.PENDING.toString());
-                taskReportPrx.notifyTaskAvailable();
+                taskReportPrx.notifyTaskAvailable(task.jobId);
             }
         }
     }

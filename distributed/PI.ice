@@ -74,7 +74,7 @@ module Pi {
     interface PiController
     {
         void calculatePi(PiRequest request, Client* clientProxy);
-        Task getTask();
+        Task getTask(string jobId);
         void setTaskResult(TaskResult taskResult);
         void notifyPiResult(Job job);
     }
@@ -88,6 +88,6 @@ module Pi {
 
     interface TaskReport
     {
-        void notifyTaskAvailable();
+        void notifyTaskAvailable(string jobId);
     }
 }

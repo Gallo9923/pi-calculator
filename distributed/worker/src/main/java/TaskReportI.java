@@ -25,7 +25,7 @@ public class TaskReportI implements Pi.TaskReport {
     }
 
     @Override
-    public void notifyTaskAvailable(Current current) {
+    public void notifyTaskAvailable(String jobId, Current current) {
 
         if (this.state == State.WORKING){
             return;
@@ -33,7 +33,7 @@ public class TaskReportI implements Pi.TaskReport {
 
         this.state = State.WORKING;
 
-        Pi.Task task = piControllerPrx.getTask();
+        Pi.Task task = piControllerPrx.getTask(jobId);
 
         Counter result = new PIResult();
         Point.setEpsilonPower(task.epsilonPower);
