@@ -48,14 +48,14 @@ public class TaskTable {
         return response;
     }
 
-    public List<Task> getPendingTasks(){
+    public List<Task> getPendingTasks(String taskJobId){
         Connection con =  PostgresqlConnection.getInstance().getConnection();
 
         List<Task> pendingTasks = new ArrayList<>();
 
         try {
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE STATE = '" + TaskState.IN_PROGRESS.toString() + "'");
+            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE STATE = '" + TaskState.PENDING.toString() + "' AND JOB_ID = '" + taskJobId + "'");
 
             if(rs.next()){
                 String taskId = rs.getString("ID");
@@ -86,7 +86,7 @@ public class TaskTable {
 
         try {
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE ID = " + id);
+            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE ID = '" + id + "'");
 
             if(rs.next()){
                 String taskId = rs.getString("ID");
