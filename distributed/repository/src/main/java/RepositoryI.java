@@ -85,6 +85,8 @@ public class RepositoryI implements Pi.Repository{
 
                 task = new Task(taskId, job.id, job.seed, job.batchSize, createDate.toString(), TaskState.IN_PROGRESS.toString(), taskCounter.toString(), 0, job.epsilonPower);
                 // TODO: END Transaction
+            }else {
+                // TODO: CALCULATE PI
             }
         }
 
