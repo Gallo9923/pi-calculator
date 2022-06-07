@@ -55,6 +55,7 @@ module Pi {
         string pointsInside;
         string clientProxy;
         int batchSize;
+        string pi;
     }
 
     class JobResult

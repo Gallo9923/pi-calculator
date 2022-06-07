@@ -13,12 +13,12 @@ public class JobTable {
         this.tableName = tableName;
     }
 
-    public String create(String nPower, String seed, String epsilonPower, String startDate, String finishDate, String taskCounter, String pointsInside, String clientProxy, String repNumbers, String batchSize){
+    public String create(String nPower, String seed, String epsilonPower, String startDate, String finishDate, String taskCounter, String pointsInside, String clientProxy, String repNumbers, String batchSize, String pi){
         String response = "";
         Connection con =  PostgresqlConnection.getInstance().getConnection();
 
         try {
-            String sqlInsert = "INSERT INTO " + this.tableName +" (N_POWER, SEED, EPSILON_POWER, START_DATE, FINISH_DATE, TASK_COUNTER, POINTS_INSIDE, CLIENT_PROXY, REP_NUMBERS, BATCH_SIZE) VALUES (\n" +
+            String sqlInsert = "INSERT INTO " + this.tableName +" (N_POWER, SEED, EPSILON_POWER, START_DATE, FINISH_DATE, TASK_COUNTER, POINTS_INSIDE, CLIENT_PROXY, REP_NUMBERS, BATCH_SIZE, PI) VALUES (\n" +
                     "'" + nPower + "',\n" +
                     "'" + seed + "',\n" +
                     "'" + epsilonPower + "',\n" +
@@ -28,7 +28,8 @@ public class JobTable {
                     "'" + pointsInside + "',\n" +
                     "'" + clientProxy + "',\n" +
                     "'" + repNumbers + "',\n" +
-                    "'" + batchSize + "')";
+                    "'" + batchSize + "',\n" +
+                    "'" + pi + "')";
 
 
             PreparedStatement ps = con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
@@ -76,6 +77,19 @@ public class JobTable {
         return response;
     }
 
+    public String updatePiResult(String id, String pi){
+        String response = this.tableName + " - INSERT SUCCESSFUL";
+        Connection con =  PostgresqlConnection.getInstance().getConnection();
+        try {
+            Statement statement = con.createStatement();
+            statement.executeQuery("UPDATE " + this.tableName +" SET PI = " + pi + " WHERE ID = " + "'" + id + "'");
+        } catch (SQLException throwables) {
+            response = this.tableName + " " + throwables.getMessage();
+        }
+
+        return response;
+    }
+
     public Job getJobById(String id){
         Connection con =  PostgresqlConnection.getInstance().getConnection();
         Job job = null;
@@ -96,8 +110,9 @@ public class JobTable {
                 String pointsInside = rs.getString("POINTS_INSIDE");
                 String clientProxy = rs.getString("CLIENT_PROXY");
                 int batchSize = Integer.parseInt(rs.getString("CLIENT_PROXY"));
+                String pi = rs.getString("PI");
 
-                job = new Job(jobID, nPower, seed, repNumbers, epsilonPower, startDate, finishDate, taskCounter, pointsInside, clientProxy, batchSize);
+                job = new Job(jobID, nPower, seed, repNumbers, epsilonPower, startDate, finishDate, taskCounter, pointsInside, clientProxy, batchSize, pi);
 
             }
 

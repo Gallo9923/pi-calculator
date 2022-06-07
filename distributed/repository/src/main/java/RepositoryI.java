@@ -1,14 +1,15 @@
 import Enums.TaskState;
-import Pi.Job;
-import Pi.Task;
-import Pi.TaskResult;
+import Pi.*;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Current;
+import model.PiResult;
 import table.JobTable;
 import table.TaskTable;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -39,7 +40,7 @@ public class RepositoryI implements Pi.Repository{
     @Override
     public Job createsJob(Job job, Current current) {
         this.r = new Random(job.seed);
-        String id = jobTable.create(job.nPower + "", job.seed + "", job.epsilonPower + "", job.startDate, job.finishDate, job.taskCounter, job.pointsInside, job.clientProxy, job.repNumbers + "", job.batchSize + "");
+        String id = jobTable.create(job.nPower + "", job.seed + "", job.epsilonPower + "", job.startDate, job.finishDate, job.taskCounter, job.pointsInside, job.clientProxy, job.repNumbers + "", job.batchSize + "", job.pi);
         job.id = id;
         return job;
     }
@@ -74,8 +75,9 @@ public class RepositoryI implements Pi.Repository{
             BigInteger taskCounter = new BigInteger(job.taskCounter);
             BigInteger n = new BigInteger("10").pow(job.nPower);
             BigInteger batchSize = new BigInteger(job.batchSize + "");
+            // TODO: Start Transaction
             if ( taskCounter.compareTo(n.divide(batchSize)) == -1){
-                // TODO: Start Transaction
+
                 taskCounter = new BigInteger(job.taskCounter).add(BigInteger.ONE);
                 job.taskCounter = taskCounter.toString();
                 jobTable.updateTaskCounter(job.id, job.taskCounter);
@@ -84,10 +86,27 @@ public class RepositoryI implements Pi.Repository{
                 String taskId = taskTable.create(jobId, job.seed + "", job.batchSize + "", createDate.toString(), TaskState.IN_PROGRESS + "", taskCounter.toString(), "0", job.epsilonPower + "");
 
                 task = new Task(taskId, job.id, job.seed, job.batchSize, createDate.toString(), TaskState.IN_PROGRESS.toString(), taskCounter.toString(), 0, job.epsilonPower);
-                // TODO: END Transaction
+
             }else {
-                // TODO: CALCULATE PI
+                // Calculate PI
+                BigDecimal pi = PiResult.getResult(job.pointsInside ,n.toString());
+                jobTable.updatePiResult(job.id, pi.toString());
+
+                LocalDateTime startTime = LocalDateTime.parse(job.startDate);
+                LocalDateTime finishTime = LocalDateTime.now();
+
+                long milliseconds = ChronoUnit.MILLIS.between(startTime, finishTime);
+                long seconds = ChronoUnit.SECONDS.between(startTime, finishTime);
+                long minutes = ChronoUnit.MINUTES.between(startTime, finishTime);
+
+                Time time = new Time(milliseconds + "", seconds + "", minutes + "" );
+
+                Result result = new Result(pi.toString(), job.repNumbers, time);
+
+                Pi.ClientPrx clientProxy = Pi.ClientPrx.checkedCast(communicator.stringToProxy(job.clientProxy)).ice_twoway().ice_secure(false);
+                clientProxy.setResult(result);
             }
+            // TODO: END Transaction
         }
 
         if (task != null){
