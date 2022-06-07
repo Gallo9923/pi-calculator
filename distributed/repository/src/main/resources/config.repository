@@ -3,3 +3,4 @@ BDuser = postgres
 BDpassword = postgres
 JobTableName = JOB
 TaskTableName = TASK
+taskMillisTimeout = 6000

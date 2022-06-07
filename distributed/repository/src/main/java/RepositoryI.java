@@ -5,6 +5,7 @@ import com.zeroc.Ice.Current;
 import model.PiResult;
 import table.JobTable;
 import table.TaskTable;
+import threads.Checker;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,15 +27,19 @@ public class RepositoryI implements Pi.Repository{
     private static final int COUNTER_POINT_SEMAPHORE_PERMITS = 1;
     private Semaphore counterPointsSemaphore;
 
+    private TaskReportPrx taskReportPrx;
+
     private Random r;
 
-    public RepositoryI(Communicator communicator){
+    public RepositoryI(Communicator communicator, TaskReportPrx taskReportPrx){
         this.communicator = communicator;
         this.jobTable = new JobTable(communicator.getProperties().getProperty("JobTableName"));
         this.taskTable = new TaskTable(communicator.getProperties().getProperty("TaskTableName"));
 
         this.pendingTaskSemaphore = new Semaphore(RepositoryI.PENDING_TASK_SEMAPHORE_PERMITS);
         this.counterPointsSemaphore = new Semaphore(RepositoryI.COUNTER_POINT_SEMAPHORE_PERMITS);
+
+        this.taskReportPrx = taskReportPrx;
     }
 
     @Override
@@ -111,6 +116,9 @@ public class RepositoryI implements Pi.Repository{
 
         if (task != null){
             // TODO: SET TASK TIMEOUT  !!!!!VERY IMPORTANT!!!!
+            long taskMillisTimeout = Long.parseLong(communicator.getProperties().getProperty("taskMillisTimeout"));
+            new Thread(new Checker(taskTable, taskMillisTimeout, task.id, taskReportPrx)).start();
+
         }
 
         return task;
@@ -119,6 +127,18 @@ public class RepositoryI implements Pi.Repository{
     @Override
     public void setTaskResult(TaskResult taskResult, Current current) {
         System.out.println("setTaskResult");
+
+        // Step 1: Acquire del semaphore
+
+        // Step 2: Consulta de la BD del task
+        // Step 3: Modificar el result y el estado del task a TaskState.DONE
+
+
+        // Step 4: Consulta BD del Job asociado al task
+        // Step 5: Modificar el contador del Job
+
+        // Step 6: invocar
+
     }
 
 
