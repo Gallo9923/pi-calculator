@@ -1,5 +1,6 @@
 package table;
 
+import Pi.Job;
 import connection.PostgresqlConnection;
 
 import java.sql.*;
@@ -71,5 +72,36 @@ public class JobTable {
         }
 
         return response;
+    }
+
+    public Job getJobById(String id){
+        Connection con =  PostgresqlConnection.getInstance().getConnection();
+        Job job = null;
+        try {
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + id);
+
+            if(rs.next()){
+
+                String jobID = rs.getString("ID");
+                short nPower = Short.parseShort(rs.getString("N_POWER"));
+                long seed = Long.parseLong(rs.getString("N_POWER"));
+                double repNumbers = Double.parseDouble(rs.getString("REP_NUMBERS"));
+                short epsilonPower = Short.parseShort(rs.getString("EPSILON_POWER"));
+                String startDate = rs.getString("START_DATE");
+                String finishDate = rs.getString("FINISH_DATE");
+                String taskCounter = rs.getString("TASK_COUNTER");
+                String pointsInside = rs.getString("POINTS_INSIDE");
+                String clientProxy = rs.getString("CLIENT_PROXY");
+
+                job = new Job(jobID, nPower, seed, repNumbers, epsilonPower, startDate, finishDate, taskCounter, pointsInside, clientProxy);
+
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return job;
+
     }
 }

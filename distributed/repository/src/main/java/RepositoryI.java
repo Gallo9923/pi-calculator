@@ -40,6 +40,17 @@ public class RepositoryI implements Pi.Repository{
     @Override
     public Task getTask(Current current) {
         System.out.println("getTask");
+
+        // Step 1: Query Task Where Task.State == PENDING
+        // TODO:
+
+        // Step 2: If no pending task. Create Task.
+        // Transaction
+            // Aumentar el taskCounter del job
+            // Crear Task
+
+        // Step 4: Return Task
+
         return null;
     }
 

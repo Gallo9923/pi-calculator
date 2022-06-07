@@ -61,6 +61,18 @@ public class TaskTable {
 
     public String getTaskById(String id) {
 
+        Connection con =  PostgresqlConnection.getInstance().getConnection();
+
+        try {
+            Statement statement = con.createStatement();
+            statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE ID = '" + id + "'");
+        } catch (SQLException throwables) {
+            response = this.tableName + " " + throwables.getMessage();
+        }
+
+        return response;
+
+
     }
 
     public String setTaskState(String state) {
