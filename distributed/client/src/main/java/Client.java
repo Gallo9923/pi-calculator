@@ -77,7 +77,7 @@ public class Client
                             piControllerPrx = getPiControllerPrx(communicator);
                         }while(piControllerPrx == null);
 
-                        Client.calculataPi(piControllerPrx, clientPrx);
+                        Client.calculatePi(piControllerPrx, clientPrx);
                         break;
                     default:
                         System.out.println("Unknown option :(");
@@ -91,7 +91,7 @@ public class Client
         return 0;
     }
 
-    private static void calculataPi(PiControllerPrx piControllerPrx, ClientPrx clientPrx){
+    private static void calculatePi(PiControllerPrx piControllerPrx, ClientPrx clientPrx){
 
         if (Client.epsilon <= 0){
             System.out.println("Epsilon was not provided");

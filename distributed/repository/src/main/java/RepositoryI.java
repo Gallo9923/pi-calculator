@@ -128,18 +128,31 @@ public class RepositoryI implements Pi.Repository{
     public void setTaskResult(TaskResult taskResult, Current current) {
         System.out.println("setTaskResult");
 
-        // Step 1: Acquire del semaphore
+        Task task = null;
+        Job job = null;
 
-        // Step 2: Consulta de la BD del task
-        // Step 3: Modificar el result y el estado del task a TaskState.DONE
+        try {
+            // Step 1: Acquire del semaphore
+            this.counterPointsSemaphore.acquire();
 
+            // Step 2: Consulta BD del Task
+            task = taskTable.getTaskById(taskResult.taskId);
 
-        // Step 4: Consulta BD del Job asociado al task
-        // Step 5: Modificar el contador del Job
+            // Step 3: Modificar el result y el estado del task a TaskState.DONE
+            taskTable.setTaskResult(taskResult.taskId, TaskState.DONE.toString(), String.valueOf(taskResult.pointsInside));
 
-        // Step 6: invocar
+            // Step 4: Consulta BD del Job asociado al Task
+            job = jobTable.getJobById(task.jobId);
 
+            // Step 5: Modificar el contador de puntos dentro del círculo del Job
+            int pointsInside = Integer.parseInt(job.pointsInside) + taskResult.pointsInside;
+            jobTable.updatePointsInside(job.id, String.valueOf(pointsInside));
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally{
+            this.counterPointsSemaphore.release();;
+        }
     }
-
 
 }

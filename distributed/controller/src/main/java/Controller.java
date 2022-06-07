@@ -1,3 +1,5 @@
+import Pi.PiControllerPrx;
+import Pi.RepositoryPrx;
 import Pi.TaskReportPrx;
 import com.zeroc.Ice.Communicator;
 
@@ -22,10 +24,12 @@ public class Controller {
 
                 TaskReportPrx taskReportPrx = getPublisher(communicator);
 
+                RepositoryPrx repositoryPrx = getRepositoryPrx(communicator);
+
                 com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiController");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
                 com.zeroc.Ice.Identity id = com.zeroc.Ice.Util.stringToIdentity(properties.getProperty("Identity"));
-                adapter.add(new PiControllerI(taskReportPrx), id);
+                adapter.add(new PiControllerI(taskReportPrx, repositoryPrx, communicator), id);
                 adapter.activate();
 
                 communicator.waitForShutdown();
@@ -61,6 +65,23 @@ public class Controller {
         com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_oneway();
         TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
         return publisher;
+    }
+
+    private static RepositoryPrx getRepositoryPrx(com.zeroc.Ice.Communicator communicator){
+        RepositoryPrx repositoryPrx = null;
+        try {
+            repositoryPrx = RepositoryPrx.checkedCast(communicator.stringToProxy("Repository"));
+        }
+        catch(com.zeroc.Ice.NotRegisteredException ex)
+        {
+            com.zeroc.IceGrid.QueryPrx query = com.zeroc.IceGrid.QueryPrx.checkedCast(communicator.stringToProxy("PiIceGrid/Query"));
+            repositoryPrx = RepositoryPrx.checkedCast(query.findObjectByType("::Pi::Repository"));
+        }
+        if(repositoryPrx == null)
+        {
+            System.err.println("couldn't find a `::Pi::PiController' object");
+        }
+        return repositoryPrx;
     }
 
 }

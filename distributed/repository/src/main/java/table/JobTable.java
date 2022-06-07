@@ -55,7 +55,7 @@ public class JobTable {
 
         try {
             Statement statement = con.createStatement();
-            statement.executeQuery("UPDATE " + this.tableName +" SET POINTS_INSIDE = " + pointsInside + " WHERE ID = " + id);
+            statement.executeQuery("UPDATE " + this.tableName + " SET POINTS_INSIDE = " + pointsInside + " WHERE ID = " + id);
         } catch (SQLException throwables) {
             response = this.tableName + " " + throwables.getMessage();
         }
