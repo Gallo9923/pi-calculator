@@ -50,6 +50,7 @@ public class PiControllerI implements PiController {
     @Override
     public void setTaskResult(TaskResult taskResult, Current current) {
         System.out.println("setTaskResult");
+        repositoryPrx.setTaskResult(taskResult);
     }
 
     @Override
