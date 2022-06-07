@@ -80,7 +80,7 @@ module Pi {
     interface Repository
     {
         Job createsJob(Job job);
-        Task getTask();
+        Task getTask(string jobId);
         void setTaskResult(TaskResult taskResult);
     }
 

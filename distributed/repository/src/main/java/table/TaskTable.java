@@ -1,5 +1,6 @@
 package table;
 
+import Enums.TaskState;
 import connection.PostgresqlConnection;
 
 import Pi.Task;
@@ -54,7 +55,7 @@ public class TaskTable {
 
         try {
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE STATE = 'IN_PROGRESS'");
+            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE STATE = '" + TaskState.IN_PROGRESS.toString() + "'");
 
             if(rs.next()){
                 String taskId = rs.getString("ID");
