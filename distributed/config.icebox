@@ -1,4 +1,4 @@
-Ice.Admin.Endpoints=tcp -h localhost -p 8070
+Ice.Admin.Endpoints=tcp -h hgrid2 -p 8070
 Ice.Admin.InstanceName=icebox
 
 IceBox.Service.IceStorm=IceStormService,37:createIceStorm --Ice.Config=config.icestorm

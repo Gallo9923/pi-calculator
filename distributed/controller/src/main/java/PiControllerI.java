@@ -31,7 +31,7 @@ public class PiControllerI implements PiController {
             jobBatchSize = Integer.parseInt(p.getProperty("BATCH_SIZE2"));
         }
 
-        Job job = new Job("", request.nPower, request.seed, 0.0, request.epsilonPower, LocalDateTime.now().toString(), "", "0", "0", clientProxy.toString(), jobBatchSize, "0");
+        Job job = new Job("", request.nPower, request.seed, 0.0, request.epsilonPower, LocalDateTime.now().toString(), LocalDateTime.now().toString(), "0", "0", clientProxy.toString(), jobBatchSize, "0");
 
         // Guardar BD
         Job currentJob = repositoryPrx.createsJob(job);

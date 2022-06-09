@@ -9,7 +9,7 @@ public class Controller {
         int status = 0;
         java.util.List<String> extraArgs = new java.util.ArrayList<String>();
 
-        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, extraArgs))
+        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.controller", extraArgs))
         {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> communicator.destroy()));
@@ -40,7 +40,7 @@ public class Controller {
     }
 
     private static TaskReportPrx getPublisher(Communicator communicator){
-        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("IceStorm/TopicManager:tcp -p 9999");
+        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8090");
         com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
         com.zeroc.IceStorm.TopicPrx topic = null;
         while(topic == null)
@@ -79,7 +79,7 @@ public class Controller {
         }
         if(repositoryPrx == null)
         {
-            System.err.println("couldn't find a `::Pi::PiController' object");
+            System.err.println("couldn't find a `::Pi::PiRepository' object");
         }
         return repositoryPrx;
     }

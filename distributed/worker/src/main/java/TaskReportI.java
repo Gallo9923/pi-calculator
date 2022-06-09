@@ -20,12 +20,16 @@ public class TaskReportI implements Pi.TaskReport {
     private RepeatedCounter repCounter;
 
     public TaskReportI(PiControllerPrx piControllerPrx){
+        System.out.println("Notify task available constructor");
+
         this.state = State.IDLE;
         this.piControllerPrx = piControllerPrx;
     }
 
     @Override
     public void notifyTaskAvailable(String jobId, Current current) {
+
+        System.out.println("Notify task available " + jobId);
 
         if (this.state == State.WORKING){
             return;
@@ -56,6 +60,8 @@ public class TaskReportI implements Pi.TaskReport {
             TaskResult taskResult = new TaskResult(task.jobId, pointsInside);
 
             piControllerPrx.setTaskResult(taskResult);
+
+            System.out.println("Task report " + taskResult.pointsInside + " - task id " + taskResult.taskId);
         }
 
         this.state = State.IDLE;

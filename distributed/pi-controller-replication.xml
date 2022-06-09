@@ -6,6 +6,8 @@
 
         <server-template id="PiControllerTemplate">
             <parameter name="index"/>
+            <parameter name="host"/>
+            <parameter name="port"/>
             <server id="PiControllerServer-${index}" exe="java" activation="on-demand">
                 <option>-jar</option>
                 <option>controller/build/libs/controller.jar</option>
@@ -24,11 +26,9 @@
             <object identity="picontroller" type="::Pi::PiController"/>
         </replica-group>
 
-        <node name="node5">
-            <server-instance template="PiControllerTemplate" index="1" port="9075" host="hgrid14"/>
-        </node>
-        <node name="node6">
-            <server-instance template="PiControllerTemplate" index="2" port="9075" host="hgrid15"/>
+        <node name="node1">
+            <server-instance template="PiControllerTemplate" index="1" port="9075" host="hgrid2"/>
+            <server-instance template="PiControllerTemplate" index="2" port="9076" host="hgrid2"/>
         </node>
     </application>
 

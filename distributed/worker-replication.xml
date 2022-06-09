@@ -6,9 +6,11 @@
 
         <server-template id="PiWorkerTemplate">
             <parameter name="index"/>
-            <server id="PiWorkerServer-${index}" exe="java" activation="on-demand">
+            <parameter name="host"/>
+            <parameter name="port"/>
+            <server id="PiWorkerServer-${index}" exe="java" activation="always">
                 <option>-jar</option>
-                <option>controller/build/libs/worker.jar</option>
+                <option>worker/build/libs/worker.jar</option>
                 <adapter name="PiWorker" endpoints="tcp -h ${host} -p ${port}" replica-group="ReplicatedPiWorkerAdapter"/>
                 <property name="Identity" value="piworker"/>
 
@@ -24,17 +26,14 @@
             <object identity="piworker" type="::Pi::TaskReport"/>
         </replica-group>
 
-        <node name="node1">
+        <node name="node2">
             <server-instance template="PiWorkerTemplate" index="1" port="9025" host="hgrid10"/>
         </node>
-        <node name="node2">
+        <node name="node3">
             <server-instance template="PiWorkerTemplate" index="2" port="9025" host="hgrid11"/>
         </node>
-        <node name="node3">
-            <server-instance template="PiWorkerTemplate" index="3" port="9025" host="hgrid12"/>
-        </node>
         <node name="node4">
-            <server-instance template="PiWorkerTemplate" index="4" port="9025" host="hgrid13"/>
+            <server-instance template="PiWorkerTemplate" index="3" port="9025" host="hgrid12"/>
         </node>
 
     </application>

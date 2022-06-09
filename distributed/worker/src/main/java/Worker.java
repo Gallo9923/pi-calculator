@@ -7,7 +7,7 @@ public class Worker{
         int status = 0;
         java.util.List<String> extraArgs = new java.util.ArrayList<String>();
 
-        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, extraArgs))
+        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.worker", extraArgs))
         {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> communicator.destroy()));
@@ -24,7 +24,7 @@ public class Worker{
                     piControllerPrx = getPiControllerPrx(communicator);
                 }while(piControllerPrx == null);
 
-                com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("TaskReport");
+                com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiWorker");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
                 com.zeroc.Ice.Identity id = com.zeroc.Ice.Util.stringToIdentity(properties.getProperty("Identity"));
                 adapter.add(new TaskReportI(piControllerPrx), id);

@@ -10,7 +10,7 @@ public class Repository {
         int status = 0;
         java.util.List<String> extraArgs = new java.util.ArrayList<String>();
 
-        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, extraArgs))
+        try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.repository", extraArgs))
         {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> communicator.destroy()));
@@ -31,7 +31,7 @@ public class Repository {
 
                 TaskReportPrx taskReportPrx = getPublisher(communicator);
 
-                com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("Repository");
+                com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiRepository");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
                 com.zeroc.Ice.Identity id = com.zeroc.Ice.Util.stringToIdentity(properties.getProperty("Identity"));
                 adapter.add(new RepositoryI(communicator, taskReportPrx), id);
@@ -45,7 +45,7 @@ public class Repository {
     }
 
     private static TaskReportPrx getPublisher(Communicator communicator){
-        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("IceStorm/TopicManager:tcp -p 9999");
+        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8090");
         com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
         com.zeroc.IceStorm.TopicPrx topic = null;
         while(topic == null)
