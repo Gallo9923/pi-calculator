@@ -12,6 +12,7 @@ public class MessengerI implements Pi.Messenger {
     public MessengerI(){
         //this.workers = new ArrayList<>();
         this.sem = new Semaphore(1, true);
+        this.observers = new ArrayList<>();
     }
 
     @Override
