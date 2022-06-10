@@ -23,7 +23,7 @@ public class Controller {
             else
             {
 
-                MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("Messenger:tcp -h hgrid2 -p 8015"));
+                MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("messenger:tcp -h hgrid2 -p 8015"));
 
                 RepositoryPrx repositoryPrx = getRepositoryPrx(communicator);
 
