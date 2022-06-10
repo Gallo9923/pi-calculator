@@ -3,7 +3,7 @@
 # "Hello". The following line sets the endpoints for this
 # adapter.
 #
-Server.Endpoints=tcp -p 8015
+Messenger.Endpoints=tcp -p 8015
 #
 # Only listen on the ZeroTier's LIASOn1 interface by default.
 #
