@@ -27,11 +27,11 @@ public class RepositoryI implements Pi.Repository{
     private static final int COUNTER_POINT_SEMAPHORE_PERMITS = 1;
     private Semaphore counterPointsSemaphore;
 
-    private TaskReportPrx taskReportPrx;
+    private MessengerPrx messengerPrx;
 
     private Random r;
 
-    public RepositoryI(Communicator communicator, TaskReportPrx taskReportPrx){
+    public RepositoryI(Communicator communicator, MessengerPrx messengerPrx){
         this.communicator = communicator;
         this.jobTable = new JobTable(communicator.getProperties().getProperty("JobTableName"));
         this.taskTable = new TaskTable(communicator.getProperties().getProperty("TaskTableName"));
@@ -39,7 +39,7 @@ public class RepositoryI implements Pi.Repository{
         this.pendingTaskSemaphore = new Semaphore(RepositoryI.PENDING_TASK_SEMAPHORE_PERMITS);
         this.counterPointsSemaphore = new Semaphore(RepositoryI.COUNTER_POINT_SEMAPHORE_PERMITS);
 
-        this.taskReportPrx = taskReportPrx;
+        this.messengerPrx = messengerPrx;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class RepositoryI implements Pi.Repository{
         if (task != null){
             // TODO: SET TASK TIMEOUT  !!!!!VERY IMPORTANT!!!!
             long taskMillisTimeout = Long.parseLong(communicator.getProperties().getProperty("taskMillisTimeout"));
-            new Thread(new Checker(taskTable, taskMillisTimeout, task.id, taskReportPrx)).start();
+            new Thread(new Checker(taskTable, taskMillisTimeout, task.id, messengerPrx)).start();
 
         }
 

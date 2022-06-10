@@ -1,4 +1,4 @@
-import Pi.TaskReportPrx;
+import Pi.MessengerPrx;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Properties;
 import connection.PostgresqlConnection;
@@ -29,12 +29,12 @@ public class Repository {
                 String password = p.getProperty("BDpassword");
                 PostgresqlConnection.configure(connectionString, user, password);
 
-                TaskReportPrx taskReportPrx = getPublisher(communicator);
+                MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("Messenger:tcp -h hgrid2 -p 8015"));
 
                 com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiRepository");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
                 com.zeroc.Ice.Identity id = com.zeroc.Ice.Util.stringToIdentity(properties.getProperty("Identity"));
-                adapter.add(new RepositoryI(communicator, taskReportPrx), id);
+                adapter.add(new RepositoryI(communicator, messengerPrx), id);
                 adapter.activate();
 
                 communicator.waitForShutdown();
@@ -44,31 +44,31 @@ public class Repository {
         System.exit(status);
     }
 
-    private static TaskReportPrx getPublisher(Communicator communicator){
-        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091");
-        com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
-        com.zeroc.IceStorm.TopicPrx topic = null;
-        while(topic == null)
-        {
-            try
-            {
-                topic = topicManager.retrieve("Tasks");
-            }
-            catch(com.zeroc.IceStorm.NoSuchTopic ex1)
-            {
-                try
-                {
-                    topic = topicManager.create("Tasks");
-                }
-                catch(com.zeroc.IceStorm.TopicExists ex2)
-                {
-                    // Another client created the topic.
-                }
-            }
-        }
-
-        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_twoway();
-        TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
-        return publisher;
-    }
+//    private static TaskReportPrx getPublisher(Communicator communicator){
+//        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091");
+//        com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
+//        com.zeroc.IceStorm.TopicPrx topic = null;
+//        while(topic == null)
+//        {
+//            try
+//            {
+//                topic = topicManager.retrieve("Tasks");
+//            }
+//            catch(com.zeroc.IceStorm.NoSuchTopic ex1)
+//            {
+//                try
+//                {
+//                    topic = topicManager.create("Tasks");
+//                }
+//                catch(com.zeroc.IceStorm.TopicExists ex2)
+//                {
+//                    // Another client created the topic.
+//                }
+//            }
+//        }
+//
+//        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_twoway();
+//        TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
+//        return publisher;
+//    }
 }
