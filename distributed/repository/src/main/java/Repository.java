@@ -67,7 +67,7 @@ public class Repository {
             }
         }
 
-        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_oneway();
+        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_twoway();
         TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
         return publisher;
     }

@@ -48,21 +48,24 @@ public class Controller {
             try
             {
                 topic = topicManager.retrieve("Tasks");
+                System.out.println("Retrieved topic TASK");
             }
             catch(com.zeroc.IceStorm.NoSuchTopic ex1)
             {
                 try
                 {
                     topic = topicManager.create("Tasks");
+                    System.out.println("Created topic TASK");
                 }
                 catch(com.zeroc.IceStorm.TopicExists ex2)
                 {
+                    System.out.println("Topic already created TASK");
                     // Another client created the topic.
                 }
             }
         }
 
-        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_oneway();
+        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_twoway();
         TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
         return publisher;
     }
