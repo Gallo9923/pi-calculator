@@ -31,6 +31,7 @@ public class Worker{
                 ObjectPrx subscriber = adapter.add(new TaskReportI(piControllerPrx), id);
                 adapter.activate();
 
+                subscribeToIceStorm(communicator, subscriber);
 
                 communicator.waitForShutdown();
             }

@@ -45,7 +45,7 @@ public class Repository {
     }
 
     private static TaskReportPrx getPublisher(Communicator communicator){
-        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8090");
+        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091");
         com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
         com.zeroc.IceStorm.TopicPrx topic = null;
         while(topic == null)

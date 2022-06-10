@@ -35,6 +35,7 @@ public class PiControllerI implements PiController {
 
         // Guardar BD
         Job currentJob = repositoryPrx.createsJob(job);
+        System.out.println("Job created: " + currentJob.id);
 
         // Notificar
         taskReportPrx.notifyTaskAvailable(currentJob.id);
