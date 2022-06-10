@@ -1,4 +1,7 @@
+import Pi.MessengerPrx;
 import Pi.PiControllerPrx;
+import Pi.TaskReportPrx;
+import Pi.TaskResult;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectPrx;
 
@@ -11,7 +14,7 @@ public class Worker{
         try(Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.worker", extraArgs))
         {
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> communicator.destroy()));
+
 
             if(!extraArgs.isEmpty())
             {
@@ -31,6 +34,16 @@ public class Worker{
                 ObjectPrx subscriber = adapter.add(new TaskReportI(piControllerPrx), id);
                 adapter.activate();
 
+
+                final TaskReportPrx taskReportPrx = TaskReportPrx.uncheckedCast(subscriber);
+                final MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("messenger:tcp -h hgrid2 -p 8015").ice_twoway().ice_secure(false));
+                messengerPrx.subscribeListener(taskReportPrx);
+
+
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    messengerPrx.unsubscribeListener(taskReportPrx);
+                    communicator.destroy();
+                }));
 //                subscribeToIceStorm(communicator, subscriber);
 
                 communicator.waitForShutdown();
