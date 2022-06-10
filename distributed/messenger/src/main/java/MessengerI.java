@@ -61,6 +61,7 @@ public class MessengerI implements Pi.Messenger {
         ArrayList<TaskReportPrx> observersToRemove = new ArrayList<TaskReportPrx>();
         for (TaskReportPrx subscriber : this.observers){
             try {
+                System.out.println("Proxy" + subscriber.toString());
                 subscriber.notifyTaskAvailable(jobId);
                 // TODO: Find the correct exception to catch
             }catch(Exception e){
