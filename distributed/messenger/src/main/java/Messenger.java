@@ -29,7 +29,7 @@ public class Messenger {
 //            SubjectI.proxy=callback;
 //
 //            System.out.println("Server running...");
-//            communicator.waitForShutdown();
+            communicator.waitForShutdown();
         }
     }
 
