@@ -29,7 +29,7 @@ public class Repository {
                 String password = p.getProperty("BDpassword");
                 PostgresqlConnection.configure(connectionString, user, password);
 
-                MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("messenger:tcp -h hgrid2 -p 8015"));
+                MessengerPrx messengerPrx = MessengerPrx.checkedCast(communicator.stringToProxy("messenger:tcp -h hgrid2 -p 8015").ice_twoway().ice_secure(false));
 
                 com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiRepository");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
