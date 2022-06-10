@@ -64,6 +64,7 @@ public class MessengerI implements Pi.Messenger {
                 subscriber.notifyTaskAvailable(jobId);
                 // TODO: Find the correct exception to catch
             }catch(Exception e){
+                e.printStackTrace();
                 observersToRemove.add(subscriber);
             }
         }
