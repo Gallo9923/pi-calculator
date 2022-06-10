@@ -60,7 +60,11 @@ public class Worker{
 
     private static void subscribeToIceStorm(Communicator communicator, com.zeroc.Ice.ObjectPrx subscriber){
         // Step 1: Get the topic manager of ICE Storm
+
+        System.out.println(communicator.propertyToProxy("TopicManager.Proxy"));
+
         com.zeroc.IceStorm.TopicManagerPrx manager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(communicator.propertyToProxy("TopicManager.Proxy"));
+
         if(manager == null)
         {
             System.err.println("invalid proxy");
