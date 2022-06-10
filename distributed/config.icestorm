@@ -7,3 +7,5 @@ IceStorm.LMDB.Path=db
 
 IceStormAdmin.Host = hgrid2
 IceStormAdmin.Port = 8071
+
+IceStormAdmin.TopicManager.Default = PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091
