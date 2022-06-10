@@ -12,7 +12,7 @@
                 <option>-jar</option>
                 <option>controller/build/libs/controller.jar</option>
                 <adapter name="PiController" endpoints="tcp -h ${host} -p ${port}" replica-group="ReplicatedPiControllerAdapter"/>
-                <property name="Identity" value="picontroller"/>
+                <property name="Identity" value="picontroller-${index}"/>
 
                 <property name="IceMX.Metrics.Debug.GroupBy" value="id"/>
                 <property name="IceMX.Metrics.Debug.Disabled" value="1"/>

@@ -38,6 +38,8 @@ public class PiControllerI implements PiController {
         System.out.println("Job created: " + currentJob.id);
 
         // Notificar
+        System.out.println("messengerPrx: " + messengerPrx.toString());
+
         messengerPrx.publish(currentJob.id);
     }
 
