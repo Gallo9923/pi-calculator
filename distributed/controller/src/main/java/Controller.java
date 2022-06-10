@@ -40,36 +40,36 @@ public class Controller {
         System.exit(status);
     }
 
-    private static TaskReportPrx getPublisher(Communicator communicator){
-        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091");
-        com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
-        com.zeroc.IceStorm.TopicPrx topic = null;
-        while(topic == null)
-        {
-            try
-            {
-                topic = topicManager.retrieve("Tasks");
-                System.out.println("Retrieved topic TASK");
-            }
-            catch(com.zeroc.IceStorm.NoSuchTopic ex1)
-            {
-                try
-                {
-                    topic = topicManager.create("Tasks");
-                    System.out.println("Created topic TASK");
-                }
-                catch(com.zeroc.IceStorm.TopicExists ex2)
-                {
-                    System.out.println("Topic already created TASK");
-                    // Another client created the topic.
-                }
-            }
-        }
-
-        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_twoway();
-        TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
-        return publisher;
-    }
+//    private static TaskReportPrx getPublisher(Communicator communicator){
+//        com.zeroc.Ice.ObjectPrx obj = communicator.stringToProxy("PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091");
+//        com.zeroc.IceStorm.TopicManagerPrx topicManager = com.zeroc.IceStorm.TopicManagerPrx.checkedCast(obj);
+//        com.zeroc.IceStorm.TopicPrx topic = null;
+//        while(topic == null)
+//        {
+//            try
+//            {
+//                topic = topicManager.retrieve("Tasks");
+//                System.out.println("Retrieved topic TASK");
+//            }
+//            catch(com.zeroc.IceStorm.NoSuchTopic ex1)
+//            {
+//                try
+//                {
+//                    topic = topicManager.create("Tasks");
+//                    System.out.println("Created topic TASK");
+//                }
+//                catch(com.zeroc.IceStorm.TopicExists ex2)
+//                {
+//                    System.out.println("Topic already created TASK");
+//                    // Another client created the topic.
+//                }
+//            }
+//        }
+//
+//        com.zeroc.Ice.ObjectPrx pub = topic.getPublisher().ice_twoway();
+//        TaskReportPrx publisher = TaskReportPrx.uncheckedCast(pub);
+//        return publisher;
+//    }
 
     private static RepositoryPrx getRepositoryPrx(com.zeroc.Ice.Communicator communicator){
         RepositoryPrx repositoryPrx = null;
