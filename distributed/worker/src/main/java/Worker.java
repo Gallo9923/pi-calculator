@@ -35,7 +35,7 @@ public class Worker{
                 adapter.activate();
 
 
-                final TaskReportPrx taskReportPrx = TaskReportPrx.uncheckedCast(subscriber);
+                final TaskReportPrx taskReportPrx = TaskReportPrx.uncheckedCast(communicator.stringToProxy(properties.getProperty("MyProxy")).ice_twoway());
                 final MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("messenger:tcp -h hgrid2 -p 8015").ice_twoway().ice_secure(false));
                 messengerPrx.subscribeListener(taskReportPrx);
 
