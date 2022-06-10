@@ -1,6 +1,6 @@
 IceStorm.InstanceName=PiIceStorm
 
 IceStorm.TopicManager.Endpoints=default -h hgrid2 -p 8091
-IceStorm.Publish.Endpoints=tcp -h hgrid2 -p 8099: udp -h hgrid2 -p 8092
+IceStorm.Publish.Endpoints=tcp -h hgrid2 -p 8092: udp -h hgrid2 -p 8092
 
 IceStorm.LMDB.Path=db
