@@ -1,6 +1,7 @@
 package threads;
 
 import Enums.TaskState;
+import Pi.MessengerPrx;
 import Pi.Task;
 import Pi.TaskReportPrx;
 import table.TaskTable;
@@ -12,13 +13,13 @@ public class Checker implements Runnable {
     private TaskTable taskTable;
     private long millisTimeout;
     private String taskId;
-    private TaskReportPrx taskReportPrx;
+    private MessengerPrx messengerPrx;
 
-    public Checker(TaskTable taskTable, long millisTimeout, String taskId, TaskReportPrx taskReportPrx){
+    public Checker(TaskTable taskTable, long millisTimeout, String taskId, MessengerPrx messengerPrx){
         this.taskTable = taskTable;
         this.millisTimeout = millisTimeout;
         this.taskId = taskId;
-        this.taskReportPrx = taskReportPrx;
+        this.messengerPrx = messengerPrx;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class Checker implements Runnable {
             Task task = taskTable.getTaskById(this.taskId);
             if (task.state.equals(TaskState.IN_PROGRESS.toString())){
                 taskTable.setTaskState(taskId, TaskState.PENDING.toString());
-                taskReportPrx.notifyTaskAvailable(task.jobId);
+                messengerPrx.publish(task.jobId);
             }
         }
     }

@@ -1,0 +1,7 @@
+ConexionBD = jdbc:postgresql://hgrid2:5432/nandito
+BDuser = postgres
+BDpassword = postgres
+JobTableName = JOB
+TaskTableName = TASK
+taskMillisTimeout = 6000
+TopicManager.Proxy=PiIceStorm/TopicManager:tcp -h hgrid2 -p 8091

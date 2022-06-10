@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 
 public class PiControllerI implements PiController {
 
-    private TaskReportPrx taskReportPrx;
+    private MessengerPrx messengerPrx;
     private RepositoryPrx repositoryPrx;
     private Communicator communicator;
 
-    public PiControllerI(TaskReportPrx taskReportPrx, RepositoryPrx repositoryPrx, Communicator communicator){
-        this.taskReportPrx = taskReportPrx;
+    public PiControllerI(MessengerPrx messengerPrx, RepositoryPrx repositoryPrx, Communicator communicator){
+        this.messengerPrx = messengerPrx;
         this.repositoryPrx = repositoryPrx;
         this.communicator = communicator;
     }
@@ -38,7 +38,7 @@ public class PiControllerI implements PiController {
         System.out.println("Job created: " + currentJob.id);
 
         // Notificar
-        taskReportPrx.notifyTaskAvailable(currentJob.id);
+        messengerPrx.publish(currentJob.id);
     }
 
     @Override

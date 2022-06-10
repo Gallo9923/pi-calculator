@@ -90,4 +90,10 @@ module Pi {
     {
         void notifyTaskAvailable(string jobId);
     }
+
+    interface Messenger {
+        void subscribeListener(TaskReport* proxy);
+        void unsubscribeListener(TaskReport* prox);
+        void publish(string jobId);
+    }
 }

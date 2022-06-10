@@ -1,3 +1,4 @@
+import Pi.MessengerPrx;
 import Pi.PiControllerPrx;
 import Pi.RepositoryPrx;
 import Pi.TaskReportPrx;
@@ -22,14 +23,14 @@ public class Controller {
             else
             {
 
-                TaskReportPrx taskReportPrx = getPublisher(communicator);
+                MessengerPrx messengerPrx = MessengerPrx.uncheckedCast(communicator.stringToProxy("Messenger:tcp -h hgrid2 -p 8015"));
 
                 RepositoryPrx repositoryPrx = getRepositoryPrx(communicator);
 
                 com.zeroc.Ice.ObjectAdapter adapter = communicator.createObjectAdapter("PiController");
                 com.zeroc.Ice.Properties properties = communicator.getProperties();
                 com.zeroc.Ice.Identity id = com.zeroc.Ice.Util.stringToIdentity(properties.getProperty("Identity"));
-                adapter.add(new PiControllerI(taskReportPrx, repositoryPrx, communicator), id);
+                adapter.add(new PiControllerI(messengerPrx, repositoryPrx, communicator), id);
                 adapter.activate();
 
                 communicator.waitForShutdown();
