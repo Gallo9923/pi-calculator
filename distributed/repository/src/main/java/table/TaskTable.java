@@ -89,6 +89,7 @@ public class TaskTable {
             ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + id);
 
             if(rs.next()){
+                System.out.println("Task record found " + id);
                 String taskId = rs.getString("ID");
                 String jobId = rs.getString("JOB_ID");
                 long seed = Long.parseLong(rs.getString("SEED"));
@@ -124,6 +125,7 @@ public class TaskTable {
 
             if (status == 1) {
                 response = this.tableName + " - UPDATE SUCCESSFUL";
+                System.out.println("Update task result successful");
             }
 
             //Statement statement = con.createStatement();
@@ -153,6 +155,7 @@ public class TaskTable {
 
             if (status == 1) {
                 response = this.tableName + " - UPDATE SUCCESSFUL";
+                System.out.println("Update task result successful");
             }
 
             //Statement statement = con.createStatement();
