@@ -82,7 +82,7 @@ public class JobTable {
         Connection con =  PostgresqlConnection.getInstance().getConnection();
         try {
             Statement statement = con.createStatement();
-            statement.executeQuery("UPDATE " + this.tableName +" SET PI = " + pi + " WHERE ID = " + "'" + id + "'");
+            statement.executeQuery("UPDATE " + this.tableName +" SET PI = " + pi + " WHERE ID = " + id);
         } catch (SQLException throwables) {
             response = this.tableName + " " + throwables.getMessage();
         }
@@ -97,7 +97,7 @@ public class JobTable {
         try {
             Statement statement = con.createStatement();
             System.out.println("Job Pre Query");
-            ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + id);
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + "'" + id +"'");
 
             if(rs.next()){
                 System.out.println("Found Record");
