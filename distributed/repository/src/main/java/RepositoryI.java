@@ -70,7 +70,7 @@ public class RepositoryI implements Pi.Repository{
         ArrayList<Task> tasks = (ArrayList<Task>) taskTable.getPendingTasks(jobId);
 
         Task task = null;
-        if (tasks.size() >= 0){
+        if (tasks.size() > 0){
             System.out.println("Pending tasks " + tasks.size());
             task = tasks.get(0);
             taskTable.setTaskState(task.id, TaskState.IN_PROGRESS.toString());
