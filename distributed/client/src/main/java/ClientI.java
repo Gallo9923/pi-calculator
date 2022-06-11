@@ -6,7 +6,8 @@ public class ClientI implements Pi.Client {
 
     @Override
     public void setResult(Result result, Current current) {
-
+        System.out.println("Slkdfndsilfgjzdlkjvksdgf");
+        int a = 1/0;
         Time time = result.totalTime;
         System.out.println(
             "========== RESULT ==========\n" +

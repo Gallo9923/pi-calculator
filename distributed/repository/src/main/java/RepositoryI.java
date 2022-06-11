@@ -124,6 +124,7 @@ public class RepositoryI implements Pi.Repository{
 
                 Pi.ClientPrx clientProxy = Pi.ClientPrx.checkedCast(communicator.stringToProxy(job.clientProxy)).ice_twoway().ice_secure(false);
                 System.out.println("Client Proxy: " + clientProxy.toString());
+                clientProxy = ClientPrx.checkedCast(communicator.stringToProxy("client:tcp -h hgrid2 -p 9088"));
                 clientProxy.setResult(result);
                 System.out.println("PI: " + pi.toString());
 

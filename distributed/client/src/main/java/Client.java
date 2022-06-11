@@ -32,7 +32,7 @@ public class Client
             adapter.activate();
 
             //ClientPrx clientPrx =  Pi.ClientPrx.uncheckedCast(adapter.createProxy(com.zeroc.Ice.Util.stringToIdentity("client")));
-            ClientPrx clientPrx = Pi.ClientPrx.uncheckedCast(communicator.stringToProxy("client:tcp -h hgrid2 -p 9088"));
+            ClientPrx clientPrx = Pi.ClientPrx.checkedCast(communicator.stringToProxy("client:tcp -h hgrid2 -p 9088"));
             if(clientPrx == null)
             {
                 throw new Error("Invalid Callback proxy");
