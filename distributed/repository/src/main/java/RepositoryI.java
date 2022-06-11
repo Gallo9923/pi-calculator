@@ -159,6 +159,8 @@ public class RepositoryI implements Pi.Repository{
             int pointsInside = Integer.parseInt(job.pointsInside) + taskResult.pointsInside;
             jobTable.updatePointsInside(job.id, String.valueOf(pointsInside));
 
+            this.messengerPrx.publish(job.id);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }finally{
