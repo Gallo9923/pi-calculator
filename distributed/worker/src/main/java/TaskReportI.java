@@ -57,7 +57,7 @@ public class TaskReportI implements Pi.TaskReport {
             e.printStackTrace();
         } finally {
             int pointsInside = result.getResult();
-            TaskResult taskResult = new TaskResult(task.jobId, pointsInside);
+            TaskResult taskResult = new TaskResult(task.id, pointsInside);
 
             piControllerPrx.setTaskResult(taskResult);
 
