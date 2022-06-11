@@ -131,13 +131,6 @@ public class RepositoryI implements Pi.Repository{
             // TODO: END Transaction
         }
 
-        if (task != null){
-            // TODO: SET TASK TIMEOUT  !!!!!VERY IMPORTANT!!!!
-            long taskMillisTimeout = Long.parseLong(communicator.getProperties().getProperty("taskMillisTimeout"));
-            new Thread(new Checker(taskTable, taskMillisTimeout, task.id, messengerPrx)).start();
-
-        }
-
         return task;
     }
 

@@ -91,14 +91,16 @@ public class JobTable {
     }
 
     public Job getJobById(String id){
+        System.out.println("getJobById " + id);
         Connection con =  PostgresqlConnection.getInstance().getConnection();
         Job job = null;
         try {
             Statement statement = con.createStatement();
+            System.out.println("Job Pre Query");
             ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + id);
 
             if(rs.next()){
-
+                System.out.println("Found Record");
                 String jobID = rs.getString("ID");
                 short nPower = Short.parseShort(rs.getString("N_POWER"));
                 long seed = Long.parseLong(rs.getString("N_POWER"));
@@ -113,10 +115,11 @@ public class JobTable {
                 String pi = rs.getString("PI");
 
                 job = new Job(jobID, nPower, seed, repNumbers, epsilonPower, startDate, finishDate, taskCounter, pointsInside, clientProxy, batchSize, pi);
-
+                System.out.println("Job Found Record " + job.id);
             }
 
         } catch (SQLException throwables) {
+            System.out.println("JOB DB ERROR");
             throwables.printStackTrace();
         }
         return job;
