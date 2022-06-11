@@ -97,7 +97,7 @@ public class JobTable {
         try {
             Statement statement = con.createStatement();
             System.out.println("Job Pre Query");
-            ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + "'" + id +"'");
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = " + id);
 
             if(rs.next()){
                 System.out.println("Found Record");
