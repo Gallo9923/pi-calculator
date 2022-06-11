@@ -36,7 +36,10 @@ public class Client
             {
                 throw new Error("Invalid Callback proxy");
             }
-            status = run(communicator, clientPrx);
+
+            new Thread(() -> run(communicator, clientPrx)).start();
+
+            communicator.waitForShutdown();
         }
 
         System.exit(status);
