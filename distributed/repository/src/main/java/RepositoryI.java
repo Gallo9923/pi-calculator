@@ -71,30 +71,44 @@ public class RepositoryI implements Pi.Repository{
 
         Task task = null;
         if (tasks.size() >= 0){
+            System.out.println("Pending tasks " + tasks.size());
             task = tasks.get(0);
             taskTable.setTaskState(task.id, TaskState.IN_PROGRESS.toString());
 
         }else{
+            System.out.println("No Pending tasks ");
             Job job = jobTable.getJobById(jobId);
+            System.out.println("Job from DB " + job.id);
+            BigInteger taskCounter = new BigInteger(job.taskCounter);  // 0
+            BigInteger n = new BigInteger("10").pow(job.nPower);  // 10^5
+            BigInteger batchSize = new BigInteger(job.batchSize + "");// 10^5
 
-            BigInteger taskCounter = new BigInteger(job.taskCounter);
-            BigInteger n = new BigInteger("10").pow(job.nPower);
-            BigInteger batchSize = new BigInteger(job.batchSize + "");
+            boolean taskToBeDone = taskCounter.compareTo(n.divide(batchSize)) == -1;
+
+            System.out.println("Task To be Done " + taskToBeDone);
             // TODO: Start Transaction
-            if ( taskCounter.compareTo(n.divide(batchSize)) == -1){
-
+            if ( taskToBeDone){
+                System.out.println("Tasks to be done");
                 taskCounter = new BigInteger(job.taskCounter).add(BigInteger.ONE);
                 job.taskCounter = taskCounter.toString();
+                System.out.println("Updating Job's Task Counter " + job.taskCounter);
                 jobTable.updateTaskCounter(job.id, job.taskCounter);
 
+                System.out.println("Creating task in DB");
                 LocalDateTime createDate = LocalDateTime.now();
                 String taskId = taskTable.create(jobId, job.seed + "", job.batchSize + "", createDate.toString(), TaskState.IN_PROGRESS + "", taskCounter.toString(), "0", job.epsilonPower + "");
 
                 task = new Task(taskId, job.id, job.seed, job.batchSize, createDate.toString(), TaskState.IN_PROGRESS.toString(), taskCounter.toString(), 0, job.epsilonPower);
 
+                System.out.println("Starting Checker");
+                long taskMillisTimeout = Long.parseLong(communicator.getProperties().getProperty("taskMillisTimeout"));
+                new Thread(new Checker(taskTable, taskMillisTimeout, task.id, messengerPrx)).start();
+
             }else {
+                System.out.println("No Tasks to be done - Calulating PI");
                 // Calculate PI
                 BigDecimal pi = PiResult.getResult(job.pointsInside ,n.toString());
+                System.out.println("Updating Job's Pi Result" + pi.toString());
                 jobTable.updatePiResult(job.id, pi.toString());
 
                 LocalDateTime startTime = LocalDateTime.parse(job.startDate);
@@ -109,7 +123,10 @@ public class RepositoryI implements Pi.Repository{
                 Result result = new Result(pi.toString(), job.repNumbers, time);
 
                 Pi.ClientPrx clientProxy = Pi.ClientPrx.checkedCast(communicator.stringToProxy(job.clientProxy)).ice_twoway().ice_secure(false);
+                System.out.println("Client Proxy: " + clientProxy.toString());
                 clientProxy.setResult(result);
+                System.out.println("PI: " + pi.toString());
+
             }
             // TODO: END Transaction
         }

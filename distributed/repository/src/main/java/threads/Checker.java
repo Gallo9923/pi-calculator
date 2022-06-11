@@ -26,13 +26,16 @@ public class Checker implements Runnable {
     public void run() {
 
         try {
+            System.out.println("Started Checker");
             Thread.sleep(millisTimeout);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             // TODO: Semaforo
             Task task = taskTable.getTaskById(this.taskId);
+            System.out.println("Checking task state ended " + task.id);
             if (task.state.equals(TaskState.IN_PROGRESS.toString())){
+                System.out.println("Task didnt ended " + task.id);
                 taskTable.setTaskState(taskId, TaskState.PENDING.toString());
                 messengerPrx.publish(task.jobId);
             }
