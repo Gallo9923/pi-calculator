@@ -102,17 +102,29 @@ public class JobTable {
             if(rs.next()){
                 System.out.println("Found Record");
                 String jobID = rs.getString("ID");
+                System.out.println("ID " + jobID);
                 short nPower = Short.parseShort(rs.getString("N_POWER"));
-                long seed = Long.parseLong(rs.getString("N_POWER"));
+                System.out.println("N_POWER " + nPower);
+                long seed = Long.parseLong(rs.getString("SEED"));
+                System.out.println("SEED " + seed);
                 double repNumbers = Double.parseDouble(rs.getString("REP_NUMBERS"));
+                System.out.println("REP_NUMBERS " + repNumbers);
                 short epsilonPower = Short.parseShort(rs.getString("EPSILON_POWER"));
+                System.out.println("EPSILON_POWER " + epsilonPower);
                 String startDate = rs.getString("START_DATE");
+                System.out.println("START_DATE " + startDate);
                 String finishDate = rs.getString("FINISH_DATE");
+                System.out.println("FINISH_DATE " + finishDate);
                 String taskCounter = rs.getString("TASK_COUNTER");
+                System.out.println("TASK_COUNTER " + taskCounter);
                 String pointsInside = rs.getString("POINTS_INSIDE");
+                System.out.println("POINTS_INSIDE " + pointsInside);
                 String clientProxy = rs.getString("CLIENT_PROXY");
-                int batchSize = Integer.parseInt(rs.getString("CLIENT_PROXY"));
+                System.out.println("CLIENT_PROXY " + clientProxy);
+                int batchSize = Integer.parseInt(rs.getString("BATCH_SIZE"));
+                System.out.println("BATCH_SIZE " + batchSize);
                 String pi = rs.getString("PI");
+                System.out.println("PI " + pi);
 
                 job = new Job(jobID, nPower, seed, repNumbers, epsilonPower, startDate, finishDate, taskCounter, pointsInside, clientProxy, batchSize, pi);
                 System.out.println("Job Found Record " + job.id);
@@ -121,6 +133,8 @@ public class JobTable {
         } catch (SQLException throwables) {
             System.out.println("JOB DB ERROR");
             throwables.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return job;
 

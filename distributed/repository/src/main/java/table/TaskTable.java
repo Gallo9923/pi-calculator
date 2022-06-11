@@ -86,7 +86,7 @@ public class TaskTable {
 
         try {
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT " + " * FROM " + this.tableName + " WHERE ID = '" + id + "'");
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + this.tableName + " WHERE ID = '" + id + "'");
 
             if(rs.next()){
                 String taskId = rs.getString("ID");
