@@ -34,10 +34,14 @@ public class TaskReportI implements Pi.TaskReport {
         if (this.state == State.WORKING){
             return;
         }
+        
+        Pi.Task task = piControllerPrx.getTask(jobId);
+
+        if (task == null){
+            return;
+        }
 
         this.state = State.WORKING;
-
-        Pi.Task task = piControllerPrx.getTask(jobId);
 
         Counter result = new PIResult();
         Point.setEpsilonPower(task.epsilonPower);
