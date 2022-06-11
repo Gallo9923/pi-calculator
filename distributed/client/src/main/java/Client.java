@@ -81,6 +81,7 @@ public class Client
                         }while(piControllerPrx == null);
 
                         Client.calculatePi(piControllerPrx, clientPrx);
+                        exit = true;
                         break;
                     default:
                         System.out.println("Unknown option :(");
