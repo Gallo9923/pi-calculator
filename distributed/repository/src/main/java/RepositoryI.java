@@ -147,7 +147,7 @@ public class RepositoryI implements Pi.Repository{
 
             // Step 2: Consulta BD del Task
             task = taskTable.getTaskById(taskResult.taskId);
-            System.out.println("Task from DB is null: " + task == null);
+            System.out.println(task == null);
 
             // Step 3: Modificar el result y el estado del task a TaskState.DONE
             taskTable.setTaskResult(taskResult.taskId, TaskState.DONE.toString(), String.valueOf(taskResult.pointsInside));

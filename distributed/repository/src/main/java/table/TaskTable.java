@@ -80,6 +80,7 @@ public class TaskTable {
     }
 
     public Task getTaskById(String id) {
+        System.out.println("getTaskById id " + this.tableName + " " + id);
         Connection con =  PostgresqlConnection.getInstance().getConnection();
 
         Task task = null;
@@ -91,19 +92,30 @@ public class TaskTable {
             if(rs.next()){
                 System.out.println("Task record found " + id);
                 String taskId = rs.getString("ID");
+                System.out.println("taskId " + taskId);
                 String jobId = rs.getString("JOB_ID");
+                System.out.println("jobId " + jobId);
                 long seed = Long.parseLong(rs.getString("SEED"));
+                System.out.println("seed " + seed);
                 int batchSize = Integer.parseInt(rs.getString("BATCH_SIZE"));
+                System.out.println("batchSize " + batchSize);
                 String createDate = rs.getString("CREATE_DATE");
+                System.out.println("createDate " + createDate);
                 String state = rs.getString("STATE");
+                System.out.println("state " + state);
                 String batchNumber = rs.getString("BATCH_NUMBER");
+                System.out.println("batchNumber " + batchNumber);
                 int result = Integer.parseInt(rs.getString("RESULT"));
+                System.out.println("result " + result);
                 short nPower = Short.parseShort(rs.getString("N_POWER"));
+                System.out.println("nPower " + nPower);
 
                 task = new Task(taskId, jobId, seed, batchSize, createDate, state, batchNumber, result, nPower);
             }
         } catch (SQLException throwables) {
             throwables.getMessage();
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
         return task;
