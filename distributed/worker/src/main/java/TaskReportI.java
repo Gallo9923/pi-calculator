@@ -63,7 +63,9 @@ public class TaskReportI implements Pi.TaskReport {
             int pointsInside = result.getResult();
             TaskResult taskResult = new TaskResult(task.id, pointsInside);
 
-            piControllerPrx.setTaskResult(taskResult);
+            this.state = State.IDLE;
+
+            new Thread(() -> piControllerPrx.setTaskResult(taskResult)).start();
 
             System.out.println("Task report " + taskResult.pointsInside + " - task id " + taskResult.taskId);
         }
