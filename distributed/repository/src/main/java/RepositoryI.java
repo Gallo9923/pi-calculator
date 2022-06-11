@@ -108,8 +108,6 @@ public class RepositoryI implements Pi.Repository{
                 System.out.println("No Tasks to be done - Calulating PI");
                 // Calculate PI
                 BigDecimal pi = PiResult.getResult(job.pointsInside ,n.toString());
-                System.out.println("Updating Job's Pi Result" + pi.toString());
-                jobTable.updatePiResult(job.id, pi.toString());
 
                 LocalDateTime startTime = LocalDateTime.parse(job.startDate);
                 LocalDateTime finishTime = LocalDateTime.now();
@@ -119,6 +117,9 @@ public class RepositoryI implements Pi.Repository{
                 long minutes = ChronoUnit.MINUTES.between(startTime, finishTime);
 
                 Time time = new Time(milliseconds + "", seconds + "", minutes + "" );
+
+                System.out.println("Updating Job's Pi Result --> " + pi.toString() + " / milli: " + milliseconds + " / seconds: " + seconds + " / minutes: " + minutes);
+                jobTable.updatePiResult(job.id, pi.toString() + " / milli: " + milliseconds + " / seconds: " + seconds + " / minutes: " + minutes);
 
                 Result result = new Result(pi.toString(), job.repNumbers, time);
 
