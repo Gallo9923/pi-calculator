@@ -107,10 +107,10 @@ public class TaskTable {
                 System.out.println("batchNumber " + batchNumber);
                 int result = Integer.parseInt(rs.getString("RESULT"));
                 System.out.println("result " + result);
-                short nPower = Short.parseShort(rs.getString("N_POWER"));
-                System.out.println("nPower " + nPower);
+                short epsilonPower = Short.parseShort(rs.getString("EPSILON_POWER"));
+                System.out.println("epsilonPower " + epsilonPower);
 
-                task = new Task(taskId, jobId, seed, batchSize, createDate, state, batchNumber, result, nPower);
+                task = new Task(taskId, jobId, seed, batchSize, createDate, state, batchNumber, result, epsilonPower);
             }
         } catch (SQLException throwables) {
             throwables.getMessage();
