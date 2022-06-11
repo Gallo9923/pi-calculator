@@ -8,6 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// 8 workers
+// 10^12 23m 3.141592
+// 10^11 2:17 3.1415
+// seed 3000
 public class TaskTable {
 
     private String tableName;
@@ -126,22 +130,22 @@ public class TaskTable {
         Connection con =  PostgresqlConnection.getInstance().getConnection();
 
         try {
-            String sqlUpdate = "UPDATE " + this.tableName + " SET STATE = ? WHERE ID = ?";
+//            String sqlUpdate = "UPDATE " + this.tableName + " SET STATE = ? WHERE ID = ?";
+//
+//            PreparedStatement ps = con.prepareStatement(sqlUpdate);
+//
+//            ps.setString(1, state);
+//            ps.setString(2, id);
+//
+//            int status = ps.executeUpdate();
+//
+//            if (status == 1) {
+//                response = this.tableName + " - UPDATE SUCCESSFUL";
+//                System.out.println("Update task result successful");
+//            }
 
-            PreparedStatement ps = con.prepareStatement(sqlUpdate);
-
-            ps.setString(1, state);
-            ps.setString(2, id);
-
-            int status = ps.executeUpdate();
-
-            if (status == 1) {
-                response = this.tableName + " - UPDATE SUCCESSFUL";
-                System.out.println("Update task result successful");
-            }
-
-            //Statement statement = con.createStatement();
-            //statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + " WHERE ID = " + id);
+            Statement statement = con.createStatement();
+            statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + " WHERE ID = " + id);
 
         } catch (SQLException throwables) {
             System.out.println(this.tableName + " " + throwables.getMessage());
@@ -155,23 +159,23 @@ public class TaskTable {
         Connection con =  PostgresqlConnection.getInstance().getConnection();
 
         try {
-            String sqlUpdate = "UPDATE " + this.tableName + " SET STATE = ?, RESULT = ? WHERE ID = ?";
+//            String sqlUpdate = "UPDATE " + this.tableName + " SET STATE = ?, RESULT = ? WHERE ID = ?";
+//
+//            PreparedStatement ps = con.prepareStatement(sqlUpdate);
+//
+//            ps.setString(1, state);
+//            ps.setString(2, result);
+//            ps.setString(3, id);
+//
+//            int status = ps.executeUpdate();
+//
+//            if (status == 1) {
+//                response = this.tableName + " - UPDATE SUCCESSFUL";
+//                System.out.println("Update task result successful");
+//            }
 
-            PreparedStatement ps = con.prepareStatement(sqlUpdate);
-
-            ps.setString(1, state);
-            ps.setString(2, result);
-            ps.setString(3, id);
-
-            int status = ps.executeUpdate();
-
-            if (status == 1) {
-                response = this.tableName + " - UPDATE SUCCESSFUL";
-                System.out.println("Update task result successful");
-            }
-
-            //Statement statement = con.createStatement();
-            //statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + ", RESULT = " + result + " WHERE ID = " + id);
+            Statement statement = con.createStatement();
+            statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + ", RESULT = " + result + " WHERE ID = " + id);
 
         } catch (SQLException throwables) {
             System.out.println(this.tableName + " " + throwables.getMessage());
