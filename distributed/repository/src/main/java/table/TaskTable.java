@@ -145,7 +145,7 @@ public class TaskTable {
 //            }
 
             Statement statement = con.createStatement();
-            statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + " WHERE ID = " + id);
+            statement.executeQuery("UPDATE " + this.tableName + " SET STATE = '" + state + "' WHERE ID = " + id);
 
         } catch (SQLException throwables) {
             System.out.println(this.tableName + " " + throwables.getMessage());
@@ -175,7 +175,7 @@ public class TaskTable {
 //            }
 
             Statement statement = con.createStatement();
-            statement.executeQuery("UPDATE " + this.tableName + " SET STATE = " + state + ", RESULT = " + result + " WHERE ID = " + id);
+            statement.executeQuery("UPDATE " + this.tableName + " SET STATE = '" + state + "', RESULT = " + result + " WHERE ID = " + id);
 
         } catch (SQLException throwables) {
             System.out.println(this.tableName + " " + throwables.getMessage());
